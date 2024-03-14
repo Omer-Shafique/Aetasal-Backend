@@ -1,0 +1,44 @@
+{
+    "env": "local",
+    "version": "unknown",
+    "tokenSecret": "tut0rsw3bhub@",
+    "server": {
+        "port": 3000,
+        "frontendURL": "http://localhost:4200",
+        "passwordSalt": "tut0rsw3bhub@",
+        "tokenExpiry": "1w",
+        "resetHashExpiry": 4
+    },
+    "postgres": {
+        "host": "localhost",
+        "port": 5432,
+        "username": "postgres",
+        "password": "postgres",
+        "database": "aetasaal",
+        "url": ""
+    },
+    "apiAccessKeys": {
+        "app": "123456"
+    },
+    "email": {
+        "host": "smtp.gmail.com",
+        "port": 465,
+        "secure": true,
+        "user": "info@tutorswebhub.com",
+        "password": "ISlA7Pl0"
+    },
+    "cloudinary": {
+        "name": "hkjwi1kol",
+        "apiKey": "732115177397848",
+        "apiSecret": "kdCEa_TfwwQEfgueAzcc8--7a30",
+        "env": "cloudinary://732115177397848:kdCEa_TfwwQEfgueAzcc8--7a30@hkjwi1kol/"
+    },
+    "sendgrid": {
+        "key": ""
+    },
+    "fcm": {
+        "serverKey": "AIzaSyAC_Sr8Spc8-D5wjzMGlh0EaPHsLhEtxE0"
+    },
+    "realTimeIntervalInMin": 2,
+    "appVersion": 1.1
+}

@@ -1,0 +1,130 @@
+var _ = require('lodash')
+import * as Sequelize from 'sequelize';
+import { Op } from 'sequelize';
+
+import { Models } from '../models/index';
+import { IPaginationOpts } from '../interface/request';
+import { IRoleAttributes, IRoleInstance } from '../models/role';
+
+export const findByClientId = async (clientId: string, search: string, pagination: IPaginationOpts) => {
+  const queryWhere: any = {};
+  queryWhere.clientId = clientId;
+  queryWhere.isActive = true;
+
+  if (search) {
+    queryWhere.name = {
+      [Op.iLike]: `%${search}%`
+    };
+  }
+  const data = await Models.Role.findAndCountAll({
+    attributes: ['id', 'name', 'description', 'sortOrder', 'clientId', 'isTeamBased', 'parentRoleId'],
+    include: [{
+      model: Models.RolePolicy,
+      include: [{
+        model: Models.Policy,
+        attributes: ['id', 'name']
+      }]
+    }],
+    where: queryWhere,
+    limit: !pagination.all ? pagination.pageSize : undefined,
+    offset: !pagination.all ? pagination.offset : undefined,
+    order: [Sequelize.literal(`lower("role".${pagination.sortBy}) ${pagination.sortOrder}`)]
+  });
+  const roles: { count: number, rows: IRoleInstance[] } = { count: data.count, rows: [] };
+  for (const role of data.rows) {
+    let savedRole = role.get({ plain: true });
+    savedRole.policies = [];
+
+    if (savedRole.rolePolicies) {
+      const policies = savedRole.rolePolicies.map((policy) => policy.policy);
+      savedRole.policies = _.compact(policies);
+    }
+
+    savedRole = _.omit(savedRole, 'rolePolicies');
+    roles.rows.push(savedRole as IRoleInstance);
+  }
+
+  return roles;
+};
+
+export const add = async (policyIds: string[], role: IRoleAttributes): Promise<IRoleAttributes> => {
+  const savedRole = await Models.Role.create({ ...role, isActive: true });
+  // add role policies
+  const rolePolicies: IRolePolicyAttributes[] = [];
+  for (const policyId of policyIds) {
+    const rolePolicy: IRolePolicyAttributes = {};
+    rolePolicy.roleId = savedRole.id;
+    rolePolicy.policyId = policyId;
+    rolePolicy.isActive = true;
+    rolePolicies.push(rolePolicy);
+  }
+  await Models.RolePolicy.bulkCreate(rolePolicies);
+  const roleAttribute = savedRole.get({ plain: true });
+  return roleAttribute;
+};
+
+export const update = async (roleId: string, policyIds: string[], role: IRoleAttributes): Promise<IRoleAttributes> => {
+  const savedRole = await Models.Role.update(role, {
+    where: {
+      id: roleId
+    },
+    returning: true
+  })
+    .then((i) => i[1][0]);
+
+  // remove existing role policies and new one
+  const rolePolicies: IRolePolicyAttributes[] = [];
+  for (const policyId of policyIds) {
+    const rolePolicy: IRolePolicyAttributes = {};
+    rolePolicy.roleId = savedRole.id;
+    rolePolicy.policyId = policyId;
+    rolePolicy.isActive = true;
+    rolePolicies.push(rolePolicy);
+  }
+
+  await Promise.all([
+    Models.RolePolicy.destroy({ where: { roleId } }),
+    Models.RolePolicy.bulkCreate(rolePolicies)
+  ]);
+
+  const roleAttribute = savedRole.get({ plain: true });
+  return roleAttribute;
+};
+
+export const remove = async (roleId: string): Promise<number> => {
+  const teamUsers = await Models.TeamUser.findAll({ where: { roleId } });
+  const userIds = teamUsers.map((teamUser) => teamUser.userId);
+
+  await Models.Action.update({ leadMemberId: null }, { where: { leadMemberId: userIds } });
+
+  await removeAssociations(roleId);
+
+  const role: IRoleAttributes = {
+    isActive: false
+  };
+
+  return Models.Role.update(role, {
+    where: {
+      id: roleId
+    }
+  })
+    .then((i) => i[0]);
+};
+
+export const removeAssociations = async (roleId: string): Promise<number> => {
+  return Models.TeamUser.destroy({ where: { roleId } });
+};
+
+export const find = async (clientId: string, name: string) => {
+  return Models.Role.find({
+    where: {
+      [Op.and]: [{
+        clientId
+      }, Sequelize.where(Sequelize.fn('lower', Sequelize.col('name')), {
+        [Op.eq]: name.toLowerCase()
+      }), {
+        isActive: true
+      }]
+    }
+  });
+};

@@ -32,32 +32,44 @@ export default async (ctx: Context, next: () => void) => {
       .empty('')
       .default(PaginationDefaults.sortOrder)
   };
-
+  // @ts-ignore
   ctx.pagination = await validate(pagination, schema);
 
   // On some APIs, we allow pageSize to be ignored. It can be done by setting
   // pageSize to a negative value.
+  // @ts-ignore
   ctx.pagination.all = ctx.pagination.limit < 0;
 
   // If sort order from payload has value other than [asc, desc]
   // Replace it with asc
   if (
+    // @ts-ignore
     ctx.pagination.sortOrder &&
+    // @ts-ignore
     ctx.pagination.sortOrder !== 'asc' &&
+    // @ts-ignore
     ctx.pagination.sortOrder !== 'desc'
   ) {
+    // @ts-ignore
     ctx.pagination.sortOrder = 'asc';
   }
 
+  
+  
   // If pageSize is to be ignored, always set pageSize to -1 for consistency.
+  // @ts-ignore
   if (ctx.pagination.all) {
+    // @ts-ignore
     ctx.pagination.limit = -1;
+    // @ts-ignore
     ctx.pagination.offset = 0;
   }
 
   // We haven't added .positive() validation because we don't want it to cause
   // any error
+  // @ts-ignore
   if (ctx.pagination.offset < 0) {
+    // @ts-ignore
     ctx.pagination.offset = 0;
   }
   await next();

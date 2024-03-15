@@ -14,9 +14,13 @@ const handler = async (ctx: Context, next: () => void) => {
       },
       data: ctx.state.data,
     };
+    // @ts-ignore
     if (ctx.pagination && ctx.method === 'GET') {
+      // @ts-ignore
       ctx.body.meta.limit = ctx.pagination.limit;
+      // @ts-ignore
       ctx.body.meta.offset = ctx.pagination.offset;
+      // @ts-ignore
       ctx.body.meta.totalCount = ctx.pagination.totalCount;
     }
   } else {

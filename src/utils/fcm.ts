@@ -1,3 +1,4 @@
+//@ts-ignore
 import * as FCM from 'fcm-push';
 import config from '../config';
 

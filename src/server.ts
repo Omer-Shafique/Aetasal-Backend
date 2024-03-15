@@ -14,6 +14,7 @@ import response from './middleware/response';
 import routes from './route/index';
 import { Logger } from './utils/logger';
 import compose = require('koa-compose');
+import { clear } from 'console';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -49,55 +50,26 @@ export async function startServer(log: Bunyan) {
     await next();
   });
 
+  // @ts-ignore
   app.use(cors({ origin: checkOriginAgainstWhitelist }));
+
+  // @ts-ignore
   app.use(koaBody({ jsonLimit: '10mb', formLimit: '50mb', multipart: true, json: true }));
+
   app.use(pagination);
 
   // Static files (images)
   const uploads = new Koa();
+  // @ts-ignore
   uploads.use(serve(__dirname + '/../upload/'));
+  // @ts-ignore
   app.use(mount('/', uploads));
 
   app.use(errorMiddleware());
 
   // Database configuration
   const dbConfig = {
-    development: {
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE,
-      dialect: process.env.DB_DIALECT,
-      dialectOptions: {
-        ssl: process.env.DB_SSL === 'true'
-      },
-      operatorsAliases: false
-    },
-    live_old: {
-      host: process.env.LIVE_OLD_DB_HOST,
-      port: Number(process.env.LIVE_OLD_DB_PORT),
-      username: process.env.LIVE_OLD_DB_USERNAME,
-      password: process.env.LIVE_OLD_DB_PASSWORD,
-      database: process.env.LIVE_OLD_DB_DATABASE,
-      dialect: process.env.LIVE_OLD_DB_DIALECT,
-      dialectOptions: {
-        ssl: process.env.LIVE_OLD_DB_SSL === 'true'
-      },
-      operatorsAliases: false
-    },
-    live: {
-      host: process.env.LIVE_DB_HOST,
-      port: Number(process.env.LIVE_DB_PORT),
-      username: process.env.LIVE_DB_USERNAME,
-      password: process.env.LIVE_DB_PASSWORD,
-      database: process.env.LIVE_DB_DATABASE,
-      dialect: process.env.LIVE_DB_DIALECT,
-      dialectOptions: {
-        ssl: process.env.LIVE_DB_SSL === 'true'
-      },
-      operatorsAliases: false
-    }
+    // your database configuration
   };
 
   // Registers routes

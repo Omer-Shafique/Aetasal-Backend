@@ -32,6 +32,7 @@ const handler = async (ctx: Context, next: () => void) => {
     ctx.body = {
       meta: metaData,
     };
+    // @ts-ignore
     ctx.log.error(err);
   }
 };

@@ -3,6 +3,7 @@ import * as config from '../config';
 import * as encryption from '../utils/encryption';
 
 export const ping = async (ctx: Context, next: () => void) => {
+  //@ts-ignore
   ctx.log.warn('inside ping');
   ctx.state.data = `pong! hi api is working`;
   await next();

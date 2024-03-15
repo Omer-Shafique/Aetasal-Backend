@@ -5,6 +5,7 @@ import * as helmet from 'koa-helmet';
 import * as mount from 'koa-mount';
 import * as serve from 'koa-static';
 import * as cors from 'koa2-cors';
+import * as dotenv from 'dotenv'; 
 
 import config from './config/index';
 import pagination from './middleware/pagination';
@@ -13,6 +14,9 @@ import response from './middleware/response';
 import routes from './route/index';
 import { Logger } from './utils/logger';
 import compose = require('koa-compose');
+
+// Load environment variables from .env file
+dotenv.config();
 
 const whitelist = [
   'http://localhost:4200',
@@ -55,6 +59,46 @@ export async function startServer(log: Bunyan) {
   app.use(mount('/', uploads));
 
   app.use(errorMiddleware());
+
+  // Database configuration
+  const dbConfig = {
+    development: {
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
+      dialect: process.env.DB_DIALECT,
+      dialectOptions: {
+        ssl: process.env.DB_SSL === 'true'
+      },
+      operatorsAliases: false
+    },
+    live_old: {
+      host: process.env.LIVE_OLD_DB_HOST,
+      port: Number(process.env.LIVE_OLD_DB_PORT),
+      username: process.env.LIVE_OLD_DB_USERNAME,
+      password: process.env.LIVE_OLD_DB_PASSWORD,
+      database: process.env.LIVE_OLD_DB_DATABASE,
+      dialect: process.env.LIVE_OLD_DB_DIALECT,
+      dialectOptions: {
+        ssl: process.env.LIVE_OLD_DB_SSL === 'true'
+      },
+      operatorsAliases: false
+    },
+    live: {
+      host: process.env.LIVE_DB_HOST,
+      port: Number(process.env.LIVE_DB_PORT),
+      username: process.env.LIVE_DB_USERNAME,
+      password: process.env.LIVE_DB_PASSWORD,
+      database: process.env.LIVE_DB_DATABASE,
+      dialect: process.env.LIVE_DB_DIALECT,
+      dialectOptions: {
+        ssl: process.env.LIVE_DB_SSL === 'true'
+      },
+      operatorsAliases: false
+    }
+  };
 
   // Registers routes
   app.use(routes());

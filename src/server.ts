@@ -5,7 +5,9 @@ import * as helmet from 'koa-helmet';
 import * as mount from 'koa-mount';
 import * as serve from 'koa-static';
 import * as cors from 'koa2-cors';
-import * as dotenv from 'dotenv'; 
+import * as dotenv from 'dotenv';
+import * as bunyanLogger from 'koa-bunyan-logger'; // Import koa-bunyan-logger
+import * as path from 'path'; // Import path module to handle file paths
 
 import config from './config/index';
 import pagination from './middleware/pagination';
@@ -13,8 +15,7 @@ import errorMiddleware from './middleware/error';
 import response from './middleware/response';
 import routes from './route/index';
 import { Logger } from './utils/logger';
-import compose = require('koa-compose');
-import { clear } from 'console';
+import { Context, Middleware } from 'koa'; // Import Context, Middleware from Koa
 
 // Load environment variables from .env file
 dotenv.config();
@@ -42,28 +43,26 @@ function checkOriginAgainstWhitelist(ctx: Koa.Context) {
 export async function startServer(log: Bunyan) {
   const app = new Koa();
 
-  app.use(Logger.koa(log));
+  // Apply koaBunyanLogger middleware before any other middleware
+  app.use(bunyanLogger(log)); // Use koa-bunyan-logger middleware
 
   // Set cache control headers manually
-  app.use(async (ctx, next) => {
+  app.use(async (ctx: Context, next: any) => {
     ctx.set('Cache-Control', 'no-cache, no-store, must-revalidate');
     await next();
   });
 
-  // @ts-ignore
   app.use(cors({ origin: checkOriginAgainstWhitelist }));
 
-  // @ts-ignore
   app.use(koaBody({ jsonLimit: '10mb', formLimit: '50mb', multipart: true, json: true }));
 
   app.use(pagination);
 
-  // Static files (images)
-  const uploads = new Koa();
-  // @ts-ignore
-  uploads.use(serve(__dirname + '/../upload/'));
-  // @ts-ignore
-  app.use(mount('/', uploads));
+// Serve the Angular application's static files
+const frontendDir = path.join(__dirname, '..', 'aetesaal-omer', 'aetasaal-frontend-omer', 'dist', 'aetasaal-web');
+
+  //@ts-ignore
+  app.use(serve(frontendDir));
 
   app.use(errorMiddleware());
 

@@ -20,6 +20,7 @@ export interface IGroupInstance extends Sequelize.Instance<IGroupAttributes> {
 export interface IGroupModel extends Sequelize.Model<IGroupInstance, IGroupAttributes> { }
 
 export const define = (sequelize: Sequelize.Sequelize): IGroupModel => {
+    //@ts-ignore
     const model: IGroupModel = sequelize.define('group', {
         id: {
             type: Sequelize.INTEGER,

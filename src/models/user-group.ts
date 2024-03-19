@@ -19,6 +19,7 @@ export interface IUserGroupInstance extends Sequelize.Instance<IUserGroupAttribu
 export interface IUserGroupModel extends Sequelize.Model<IUserGroupInstance, IUserGroupAttributes> { }
 
 export const define = (sequelize: Sequelize.Sequelize): IUserGroupModel => {
+    //@ts-ignore
     const model: IUserGroupModel = sequelize.define('userGroup', {
         id: {
             type: Sequelize.INTEGER,

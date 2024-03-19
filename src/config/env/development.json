@@ -14,7 +14,7 @@
         "port": 5432,
         "username": "postgres",
         "password": "postgres",
-        "database": "aetasaal",
+        "database": "postgres",
         "url": ""
     },
     "apiAccessKeys": {

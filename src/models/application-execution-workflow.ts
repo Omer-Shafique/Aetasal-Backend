@@ -48,6 +48,7 @@ export interface IApplicationExecutionWorkflowModel
     extends Sequelize.Model<IApplicationExecutionWorkflowInstance, IApplicationExecutionWorkflowAttributes> { }
 
 export const define = (sequelize: Sequelize.Sequelize): IApplicationExecutionWorkflowModel => {
+  //@ts-ignore
     const model: IApplicationExecutionWorkflowModel = sequelize.define('applicationExecutionWorkflow', {
       id: {
         type: Sequelize.UUID,

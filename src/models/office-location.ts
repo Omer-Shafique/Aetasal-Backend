@@ -23,6 +23,7 @@ export interface IOfficeLocationInstance extends Sequelize.Instance<IOfficeLocat
 export interface IOfficeLocationModel extends Sequelize.Model<IOfficeLocationInstance, IOfficeLocationAttributes> { }
 
 export const define = (sequelize: Sequelize.Sequelize): IOfficeLocationModel => {
+    //@ts-ignore
     const model: IOfficeLocationModel = sequelize.define('officeLocation', {
         id: {
             type: Sequelize.INTEGER,

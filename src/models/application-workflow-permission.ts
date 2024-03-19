@@ -25,6 +25,7 @@ export interface IApplicationWorkflowPermissionModel
     extends Sequelize.Model<IApplicationWorkflowPermissionInstance, IApplicationWorkflowPermissionAttributes> { }
 
 export const define = (sequelize: Sequelize.Sequelize): IApplicationWorkflowPermissionModel => {
+  //@ts-ignore
     const model: IApplicationWorkflowPermissionModel = sequelize.define('applicationWorkflowPermission', {
       id: {
         type: Sequelize.UUID,

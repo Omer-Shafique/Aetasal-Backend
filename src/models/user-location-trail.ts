@@ -24,6 +24,7 @@ export interface IUserLocationTrailModel extends
     Sequelize.Model<IUserLocationTrailInstance, IUserLocationTrailAttributes> { }
 
 export const define = (sequelize: Sequelize.Sequelize): IUserLocationTrailModel => {
+  //@ts-ignore
     const model: IUserLocationTrailModel = sequelize.define('userLocationTrail', {
         id: {
           type: Sequelize.INTEGER,

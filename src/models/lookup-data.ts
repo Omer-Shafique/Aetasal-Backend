@@ -27,6 +27,7 @@ export interface ILookupDataInstance extends Sequelize.Instance<ILookupDataAttri
 export interface ILookupDataModel extends Sequelize.Model<ILookupDataInstance, ILookupDataAttributes> { }
 
 export const define = (sequelize: Sequelize.Sequelize): ILookupDataModel => {
+    //@ts-ignore
     const model: ILookupDataModel = sequelize.define('lookupData', {
         id: {
             type: Sequelize.INTEGER,

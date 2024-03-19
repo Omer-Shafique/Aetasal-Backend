@@ -22,6 +22,7 @@ export interface IUserRoleInstance extends Sequelize.Instance<IUserRoleAttribute
 export interface IUserRoleModel extends Sequelize.Model<IUserRoleInstance, IUserRoleAttributes> { }
 
 export const define = (sequelize: Sequelize.Sequelize): IUserRoleModel => {
+    //@ts-ignore
     const model: IUserRoleModel = sequelize.define('userRole', {
         id: {
             type: Sequelize.INTEGER,

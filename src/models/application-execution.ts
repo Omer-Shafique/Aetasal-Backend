@@ -57,6 +57,7 @@ export interface IApplicationExecutionModel
     extends Sequelize.Model<IApplicationExecutionInstance, IApplicationExecutionAttributes> { }
 
 export const define = (sequelize: Sequelize.Sequelize): IApplicationExecutionModel => {
+  //@ts-ignore
     const model: IApplicationExecutionModel = sequelize.define('applicationExecution', {
       id: {
         type: Sequelize.UUID,

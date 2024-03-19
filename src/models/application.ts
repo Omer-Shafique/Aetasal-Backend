@@ -50,6 +50,7 @@ export interface IApplicationInstance extends Sequelize.Instance<IApplicationAtt
 export interface IApplicationModel extends Sequelize.Model<IApplicationInstance, IApplicationAttributes> { }
 
 export const define = (sequelize: Sequelize.Sequelize): IApplicationModel => {
+  //@ts-ignore
     const model: IApplicationModel = sequelize.define('application', {
       id: {
         type: Sequelize.INTEGER,

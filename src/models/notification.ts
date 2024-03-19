@@ -29,6 +29,7 @@ export interface INotificationInstance extends Sequelize.Instance<INotificationA
 export interface INotificationModel extends Sequelize.Model<INotificationInstance, INotificationAttributes> { }
 
 export const define = (sequelize: Sequelize.Sequelize): INotificationModel => {
+  //@ts-ignore
     const model: INotificationModel = sequelize.define('notification', {
         id: {
           type: Sequelize.INTEGER,

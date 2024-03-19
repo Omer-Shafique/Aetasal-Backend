@@ -46,6 +46,7 @@ export interface IApplicationFormFieldModel
     extends Sequelize.Model<IApplicationFormFieldInstance, IApplicationFormFieldAttributes> { }
 
 export const define = (sequelize: Sequelize.Sequelize): IApplicationFormFieldModel => {
+  //@ts-ignore
     const model: IApplicationFormFieldModel = sequelize.define('applicationFormField', {
       id: {
         type: Sequelize.UUID,

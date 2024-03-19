@@ -23,6 +23,7 @@ export interface IDepartmentInstance extends Sequelize.Instance<IDepartmentAttri
 export interface IDepartmentModel extends Sequelize.Model<IDepartmentInstance, IDepartmentAttributes> { }
 
 export const define = (sequelize: Sequelize.Sequelize): IDepartmentModel => {
+    //@ts-ignore
     const model: IDepartmentModel = sequelize.define('department', {
         id: {
             type: Sequelize.INTEGER,

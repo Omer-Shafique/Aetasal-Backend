@@ -1,5 +1,5 @@
-import * as compose from 'koa-compose';
-import * as Router from 'koa-router';
+import compose from 'koa-compose';
+import Router from 'koa-router';
 import { methodNotAllowed, notImplemented } from 'boom';
 import ping from './ping';
 import auth from './auth';

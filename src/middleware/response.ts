@@ -1,7 +1,7 @@
 import { Context } from 'koa';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as compose from 'koa-compose';
+import compose from 'koa-compose';
 import { IResponse } from '../interface/response';
 
 const handler = async (ctx: Context, next: () => void) => {

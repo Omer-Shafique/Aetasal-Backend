@@ -1,5 +1,5 @@
 import * as boom from 'boom';
-import * as moment from 'moment';
+import moment from 'moment';
 import { validate } from '../validations/index';
 
 import * as joiSchema from '../validations/schemas/user-location-trail';

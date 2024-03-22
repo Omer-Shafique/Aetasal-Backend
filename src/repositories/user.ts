@@ -1,8 +1,5 @@
 import * as Sequelize from 'sequelize';
-
-import { Models } from '../models/index';
-import { IUserInstance, IUserAttributes } from './../models/user';
-import { IUserRoleInstance, IUserRoleAttributes } from './../models/user-role';
+import { Models } from '../models/index'; 
 
 export const authenticate = async (email: string, password: string) => {
     const where: any = {
@@ -12,6 +9,7 @@ export const authenticate = async (email: string, password: string) => {
     if (password) {
         where.password = password;
     }
+    console.log('Logging Models object:', Models); 
     return Models.User.findOne({
         where,
         include: [{

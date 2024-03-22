@@ -1,60 +1,54 @@
 import * as Sequelize from 'sequelize';
-
-import { IModelFactory } from './index';
-import { IRoleAttributes, IRoleInstance } from './role';
+import { IUserAttributes, IUserInstance } from './user';
 
 export interface IUserRoleAttributes {
-    id?: number;
-    roleId?: number;
-    userId: string;
-    isActive: boolean;
-    role?: IRoleAttributes;
+  id?: number;
+  roleId?: number;
+  userId: string;
+  isActive: boolean;
 }
 
-export interface IUserRoleInstance extends Sequelize.Instance<IUserRoleAttributes> {
-    id?: number;
-    roleId?: number;
-    userId: string;
-    isActive: boolean;
-    role?: IRoleInstance;
-}
+export interface IUserRoleInstance extends Sequelize.Instance<IUserRoleAttributes>, IUserRoleAttributes {}
 
-export interface IUserRoleModel extends Sequelize.Model<IUserRoleInstance, IUserRoleAttributes> { }
+export interface IUserRoleModel extends Sequelize.Model<IUserRoleInstance, IUserRoleAttributes> {}
 
-export const define = (sequelize: Sequelize.Sequelize): IUserRoleModel => {
-    //@ts-ignore
-    const model: IUserRoleModel = sequelize.define('userRole', {
-        id: {
-            type: Sequelize.INTEGER,
-            primaryKey: true,
-            allowNull: false,
-            autoIncrement: true
-        },
-        roleId: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
-            references: {
-                model: 'role',
-                key: 'id'
-            }
-        },
-        userId: {
-            type: Sequelize.UUIDV4,
-            allowNull: false,
-            references: {
-                model: 'user',
-                key: 'id'
-            }
-        },
-        isActive: Sequelize.BOOLEAN
-    }, {
-        freezeTableName: true
-    });
+export const defineUserRoleModel = (sequelize: Sequelize.Sequelize): IUserRoleModel => {
+  const model: IUserRoleModel = sequelize.define<IUserRoleInstance, IUserRoleAttributes>(
+    'userRole',
+    {
+      id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false,
+      },
+      roleId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      userId: {
+        type: Sequelize.UUID,
+        allowNull: false,
+      },
+      isActive: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
+    },
+    {
+      freezeTableName: true,
+    }
+  );
 
-    model.associate = (models: IModelFactory) => {
-        model.belongsTo(models.User);
-        model.belongsTo(models.Role);
-    };
+  model.associate = (models: any) => {
+    model.belongsTo(models.User, { foreignKey: 'userId' });
+    // Add other associations as needed
+  };
 
-    return model;
+  return model;
 };
+
+export function define(_Database: Sequelize.Sequelize): IUserRoleModel {
+  throw new Error('Function not implemented.');
+}

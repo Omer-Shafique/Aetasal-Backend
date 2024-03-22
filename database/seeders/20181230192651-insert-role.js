@@ -1,40 +1,43 @@
 'use strict';
 
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.sequelize.query(
-      `DO
-      $do$
-      BEGIN
+  up: async (queryInterface, Sequelize) => {
+    console.log('Starting database seeding...');
 
-      IF NOT EXISTS (SELECT 1 FROM role where name = 'superAdmin') THEN
-         INSERT INTO role VALUES (Default,'superAdmin');
-      END IF;
+    try {
+      await queryInterface.sequelize.query(`
+        DO
+        $do$
+        BEGIN
 
-      IF NOT EXISTS (SELECT 1 FROM role where name = 'user') THEN
-        INSERT INTO role VALUES (Default,'user');
-      END IF;
-      
-      IF NOT EXISTS (SELECT 1 FROM role where name = 'billing') THEN
-        INSERT INTO role VALUES (Default,'billing');
-      END IF;
+        IF NOT EXISTS (SELECT 1 FROM role WHERE name = 'superAdmin') THEN
+           INSERT INTO role VALUES (DEFAULT, 'superAdmin');
+           -- Use DEFAULT instead of Default for auto-incrementing primary keys
+        END IF;
 
-      IF NOT EXISTS (SELECT 1 FROM role where name = 'appCreator') THEN
-        INSERT INTO role VALUES (Default,'appCreator');
-      END IF;
-      
-      END
-      $do$`
-    );
+        IF NOT EXISTS (SELECT 1 FROM role WHERE name = 'user') THEN
+          INSERT INTO role VALUES (DEFAULT, 'user');
+        END IF;
+        
+        IF NOT EXISTS (SELECT 1 FROM role WHERE name = 'billing') THEN
+          INSERT INTO role VALUES (DEFAULT, 'billing');
+        END IF;
+
+        IF NOT EXISTS (SELECT 1 FROM role WHERE name = 'appCreator') THEN
+          INSERT INTO role VALUES (DEFAULT, 'appCreator');
+        END IF;
+        
+        END
+        $do$
+      `);
+
+      console.log('Database seeding completed successfully.');
+    } catch (error) {
+      console.error('Error while seeding database:', error);
+    }
   },
 
-  down: () => {
-    /*
-      Add reverting commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.bulkDelete('Person', null, {});
-    */
+  down: async (queryInterface, Sequelize) => {
+    // No need to implement the down method for seeding
   }
 };

@@ -1,4 +1,4 @@
-import * as Router from 'koa-router';
+import Router from 'koa-router';
 
 import authentication from '../middleware/authentication';
 import * as ctrl from '../controller/list-of-value';

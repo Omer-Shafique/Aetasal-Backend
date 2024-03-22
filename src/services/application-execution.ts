@@ -1,7 +1,7 @@
 
 import * as boom from 'boom';
 var _ = require('lodash')
-import * as moment from 'moment';
+import moment from 'moment';
 import * as fs from 'fs';
 import { validate } from '../validations/index';
 

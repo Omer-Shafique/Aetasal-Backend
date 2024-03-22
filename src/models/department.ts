@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize';
 
-import { IModelFactory } from './index';
+import { IModelFactory } from '.';
 
 export interface IDepartmentAttributes {
     id: number;

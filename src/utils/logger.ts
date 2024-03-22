@@ -1,6 +1,6 @@
 import { Middleware, Context } from 'koa'; 
 import * as compose from 'koa-compose';
-import * as Bunyan from 'bunyan';
+import Bunyan from 'bunyan';
 import * as KoaBunyan from 'koa-bunyan-logger';
 import * as Boom from 'boom';
 import { mkdirSync, existsSync } from 'fs';

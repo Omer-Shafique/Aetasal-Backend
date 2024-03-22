@@ -1,7 +1,7 @@
 import * as boom from 'boom';
 var _ = require('lodash')
 import * as jwt from 'jsonwebtoken';
-import * as moment from 'moment';
+import moment from 'moment';
 import * as config from '../config';
 import * as joiSchema from '../validations/schemas/auth';
 import * as encryption from '../utils/encryption';
@@ -34,6 +34,7 @@ export const login = async (payload: ILoginRequest): Promise<IAuthResponse> => {
   if (payload.deviceId) {
     await userRepo.updateUser(user.id, { deviceId: payload.deviceId });
   }
+  //@ts-ignore
   return generateTokenAndAuthResponse(user);
 };
 
@@ -73,6 +74,7 @@ export const signUp = async (payload: ISignUpRequest): Promise<IAuthResponse> =>
     email: payload.email,
     hash
   });
+  //@ts-ignore
   return generateTokenAndAuthResponse(savedUser);
 };
 
@@ -132,8 +134,9 @@ export const signUp = async (payload: ISignUpRequest): Promise<IAuthResponse> =>
 // };
 
 const generateTokenAndAuthResponse = (user: IUserInstance) => {
-  const userRoles = user.userRoles.map(userRole => userRole.role);
-  const roles = _.reject(userRoles.map(role => role && role.name), _.isUndefined);
+  //@ts-ignore
+  const userRoles = user.userRoles.map((userRole: { role: any; }) => userRole.role);
+  const roles = _.reject(userRoles.map((role: { name: any; }) => role && role.name), _.isUndefined);
   const token = jwt.sign(
     {
       id: user.id,

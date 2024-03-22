@@ -1,6 +1,6 @@
 import * as boom from 'boom';
 var _ = require('lodash')
-import * as moment from 'moment';
+import moment from 'moment';
 import { validate } from '../validations/index';
 
 import * as helper from '../utils/helper';

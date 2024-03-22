@@ -1,5 +1,6 @@
 //@ts-ignore
-import * as FCM from 'fcm-push';
+import FCM from 'fcm-push'; 
+
 import config from '../config';
 
 let globalFcm: any;

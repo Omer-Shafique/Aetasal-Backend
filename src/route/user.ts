@@ -1,4 +1,4 @@
-import * as Router from 'koa-router';
+import Router from 'koa-router';
 
 import * as ctrl from '../controller/auth';
 import * as userCtrl from '../controller/user';

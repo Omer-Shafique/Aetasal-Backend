@@ -20,7 +20,7 @@ export const socialLoginSchema: Joi.SchemaMap = {
     socialProvider: Joi.string(),
     pictureUrl: Joi.string(),
     timezone: Joi.string(),
-    role: Joi.when('isSignUp', {
+    role: Joi.alternatives().when('isSignUp', {
         is: true,
         then: Joi.string().required().valid([Role.SUPER_ADMIN, Role.USER, Role.BILLING, Role.APP_CREATOR])
     }),

@@ -123,15 +123,16 @@ export const saveApplicationExecutionWorkflow: Joi.SchemaMap = {
         ApplicationExecutionStatus.DRAFT,
         ApplicationExecutionStatus.CLARITY,
         ApplicationExecutionStatus.REJECT,
-        ApplicationExecutionStatus.APPROVED]),
-    rejectionDetails: Joi.when('status', {
+        ApplicationExecutionStatus.APPROVED
+    ]),
+    rejectionDetails: Joi.alternatives().when('status', {
         is: ApplicationExecutionStatus.REJECT,
         then: Joi.object({
             userId: Joi.string().uuid().required(),
             comment: Joi.string().required()
         }).required()
     }),
-    clarificationDetails: Joi.when('status', {
+    clarificationDetails: Joi.alternatives().when('status', {
         is: ApplicationExecutionStatus.CLARITY,
         then: Joi.object({
             userId: Joi.string().uuid().required(),
@@ -139,67 +140,68 @@ export const saveApplicationExecutionWorkflow: Joi.SchemaMap = {
         }).required()
     })
 };
-
-export const publishApplicationExecutionWorkflow: Joi.SchemaMap = {
-    applicationExecutionWorkflowId: Joi.string().uuid().required(),
-    applicationId: Joi.string().uuid().required(),
-    applicationExecutionId: Joi.string().uuid().required(),
-};
-
-export const getExecutionByLoggedInUserId: Joi.SchemaMap = {
-    loggedInUserId: Joi.string().uuid().required(),
-    type: Joi.string().valid([
-        ApplicationWorkflowType.APPROVAL,
-        ApplicationWorkflowType.INPUT,
-    ]).required(),
-    status: Joi.string().valid([
-        ApplicationExecutionStatus.DRAFT,
-    ]).optional()
-};
-
-export const getExecutionInProcessLoggedInUserId: Joi.SchemaMap = {
-    loggedInUserId: Joi.string().uuid().required(),
-    status: Joi.string().required().valid([
-        ApplicationExecutionStatus.DRAFT,
-        ApplicationExecutionStatus.APPROVED,
-        ApplicationExecutionStatus.REJECT,
-        ApplicationExecutionStatus.CLARITY,
-        ApplicationExecutionStatus.IN_PROGRESS
-    ])
-};
-
-export const getExecutionParticipatedLoggedInUserId: Joi.SchemaMap = {
-    loggedInUserId: Joi.string().uuid().required(),
-    searchText: Joi.string().optional().allow(null, ''),
-};
-
-export const getApplicationExecutionTimeReport: Joi.SchemaMap = {
-    applicationId: Joi.string().uuid().required(),
-    startDate: Joi.date().required(),
-    endDate: Joi.date().required(),
-};
-
-export const reassignWorkflow: Joi.SchemaMap = {
-    applicationId: Joi.string().uuid().required(),
-    executionId: Joi.string().uuid().required(),
-    workflowId: Joi.string().uuid().required(),
-    userId: Joi.string().uuid().required(),
-};
-
-export const withdraw: Joi.SchemaMap = {
-    loggedInUserId: Joi.string().uuid().required(),
-    executionId: Joi.string().uuid().required(),
-};
-
-export const getExecutionParticipatedUsers: Joi.SchemaMap = {
-    loggedInUserId: Joi.string().uuid().required(),
-    executionId: Joi.string().uuid().required()
-};
-
-export const deleteExecutionByApplicationId: Joi.SchemaMap = {
-    loggedInUserId: Joi.string().uuid().required(),
-    applicationId: Joi.string().uuid().required(),
-    startDate: Joi.date().required(),
-    endDate: Joi.date().required(),
-    status: Joi.string().required()
-};
+    
+    export const publishApplicationExecutionWorkflow: Joi.SchemaMap = {
+        applicationExecutionWorkflowId: Joi.string().uuid().required(),
+        applicationId: Joi.string().uuid().required(),
+        applicationExecutionId: Joi.string().uuid().required(),
+    };
+    
+    export const getExecutionByLoggedInUserId: Joi.SchemaMap = {
+        loggedInUserId: Joi.string().uuid().required(),
+        type: Joi.string().valid([
+            ApplicationWorkflowType.APPROVAL,
+            ApplicationWorkflowType.INPUT,
+        ]).required(),
+        status: Joi.string().valid([
+            ApplicationExecutionStatus.DRAFT,
+        ]).optional()
+    };
+    
+    export const getExecutionInProcessLoggedInUserId: Joi.SchemaMap = {
+        loggedInUserId: Joi.string().uuid().required(),
+        status: Joi.string().required().valid([
+            ApplicationExecutionStatus.DRAFT,
+            ApplicationExecutionStatus.APPROVED,
+            ApplicationExecutionStatus.REJECT,
+            ApplicationExecutionStatus.CLARITY,
+            ApplicationExecutionStatus.IN_PROGRESS
+        ])
+    };
+    
+    export const getExecutionParticipatedLoggedInUserId: Joi.SchemaMap = {
+        loggedInUserId: Joi.string().uuid().required(),
+        searchText: Joi.string().optional().allow(null, ''),
+    };
+    
+    export const getApplicationExecutionTimeReport: Joi.SchemaMap = {
+        applicationId: Joi.string().uuid().required(),
+        startDate: Joi.date().required(),
+        endDate: Joi.date().required(),
+    };
+    
+    export const reassignWorkflow: Joi.SchemaMap = {
+        applicationId: Joi.string().uuid().required(),
+        executionId: Joi.string().uuid().required(),
+        workflowId: Joi.string().uuid().required(),
+        userId: Joi.string().uuid().required(),
+    };
+    
+    export const withdraw: Joi.SchemaMap = {
+        loggedInUserId: Joi.string().uuid().required(),
+        executionId: Joi.string().uuid().required(),
+    };
+    
+    export const getExecutionParticipatedUsers: Joi.SchemaMap = {
+        loggedInUserId: Joi.string().uuid().required(),
+        executionId: Joi.string().uuid().required()
+    };
+    
+    export const deleteExecutionByApplicationId: Joi.SchemaMap = {
+        loggedInUserId: Joi.string().uuid().required(),
+        applicationId: Joi.string().uuid().required(),
+        startDate: Joi.date().required(),
+        endDate: Joi.date().required(),
+        status: Joi.string().required()
+    };
+    

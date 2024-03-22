@@ -1,7 +1,7 @@
 import { notFound } from 'boom';
 import * as Boom from 'boom';
 import { Context } from 'koa';
-import * as compose from 'koa-compose';
+import compose from 'koa-compose';
 import * as Joi from 'joi';
 import config from '../config';
 

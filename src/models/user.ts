@@ -1,7 +1,6 @@
 import * as Sequelize from 'sequelize';
-import { IUserRoleAttributes, IUserRoleInstance } from './user-role';
-
-import { IModelFactory } from './index';
+import { IUserRoleInstance } from './user-role';
+import { IModelFactory, Models } from './index';
 
 export interface IUserAttributes {
   id: string;
@@ -23,43 +22,23 @@ export interface IUserAttributes {
   createdAt: Date;
   deletedAt: Date;
   deletedBy: string;
-  userRoles: IUserRoleAttributes[];
 }
 
-export interface IUserInstance extends Sequelize.Instance<IUserAttributes> {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  isEmailVerified: boolean;
-  password: string;
-  contactNo: string;
-  pictureUrl: string;
-  gender: string;
-  managerId: string;
-  departmentId: number;
-  officeLocationId: number;
-  timezone: string;
-  isApproved: boolean;
-  isActive: boolean;
-  deviceId: string;
-  createdAt: Date;
-  deletedAt: Date;
-  deletedBy: string;
+export interface IUserInstance extends Sequelize.Instance<IUserAttributes>, IUserAttributes {
   userRoles: IUserRoleInstance[];
 }
 
 export interface IUserModel extends Sequelize.Model<IUserInstance, IUserAttributes> {}
 
 export const define = (sequelize: Sequelize.Sequelize): IUserModel => {
-  const model: IUserModel = sequelize.define(
+  const model: IUserModel = sequelize.define<IUserInstance, IUserAttributes>(
     'user',
     {
       id: {
-        type: Sequelize.UUIDV4,
+        type: Sequelize.UUID,
         primaryKey: true,
         allowNull: false,
-        autoIncrement: true,
+        defaultValue: Sequelize.UUIDV4,
       },
       firstName: {
         type: Sequelize.STRING,
@@ -99,7 +78,7 @@ export const define = (sequelize: Sequelize.Sequelize): IUserModel => {
         allowNull: true,
       },
       managerId: {
-        type: Sequelize.UUIDV4,
+        type: Sequelize.UUID,
         allowNull: true,
         references: {
           model: 'user',
@@ -145,4 +124,34 @@ export const define = (sequelize: Sequelize.Sequelize): IUserModel => {
   };
 
   return model;
+};
+
+export const authenticate = async (email: string, password: string) => {
+    const where: any = {
+        email,
+        deletedAt: null
+    };
+    if (password) {
+        where.password = password;
+    }
+    console.log('Logging Models object:', Models); 
+    return Models.User.findOne({
+        where,
+        include: [{
+            model: Models.UserRole,
+            include: [{
+                model: Models.Role,
+                attributes: ['id', 'name']
+            }],
+            attributes: ['id', 'userId', 'roleId']
+        }]
+    });
+};
+
+export const getActiveUserCount = async () => {
+    return Models.User.count({
+        where: {
+            isActive: true
+        }
+    });
 };

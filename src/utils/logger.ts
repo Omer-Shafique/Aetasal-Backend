@@ -10,6 +10,9 @@ import * as util from 'util';
 let globalLogger: Bunyan;
 
 export class Logger {
+  static error(_arg0: string, _err: any) {
+    throw new Error('Method not implemented.');
+  }
   public static koa(_logger: Bunyan): compose.ComposedMiddleware<Context> {
     // @ts-ignore
     const middleware: compose.ComposedMiddleware<Context> = compose([

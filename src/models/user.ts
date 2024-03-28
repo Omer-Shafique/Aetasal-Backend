@@ -4,6 +4,8 @@ import { IUserRoleAttributes, IUserRoleInstance } from './user-role';
 import { IModelFactory } from './index';
 
 export interface IUserAttributes {
+  username: string;
+  roles: any;
   id: string;
   firstName: string;
   lastName: string;
@@ -27,6 +29,7 @@ export interface IUserAttributes {
 }
 
 export interface IUserInstance extends Sequelize.Instance<IUserAttributes> {
+  roles: any;
   id: string;
   firstName: string;
   lastName: string;

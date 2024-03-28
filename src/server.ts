@@ -89,7 +89,6 @@
 // }
 
 
-
 import * as Bunyan from 'bunyan';
 import * as Koa from 'koa';
 import * as koaBody from 'koa-body';
@@ -100,6 +99,7 @@ import * as cors from 'koa2-cors';
 import * as dotenv from 'dotenv';
 import * as bunyanLogger from 'koa-bunyan-logger';
 import * as path from 'path';
+import * as crypto from 'crypto'; // Import crypto module for generating secret key
 
 import config from './config/index';
 import pagination from './middleware/pagination';
@@ -110,6 +110,15 @@ import { Logger } from './utils/logger';
 import { Context, Middleware } from 'koa';
 
 dotenv.config();
+
+// Function to generate a random secret key
+function generateSecretKey(): string {
+  return crypto.randomBytes(32).toString('hex');
+}
+
+// Generate a random secret key
+const secret = generateSecretKey();
+console.log('JWT Secret Key:', secret); 
 
 const whitelist = [
   'http://localhost:4200',

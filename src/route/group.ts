@@ -9,12 +9,15 @@ const router = new Router({
   prefix: `/api/group`,
 });
 
-router.use(authentication);
+// router.use(authentication);
 
-router.get('/', authorization(false, [Role.SUPER_ADMIN, Role.USER, Role.APP_CREATOR]), ctrl.getAll);
+router.get('/', authorization(), ctrl.getAll);
+// router.get('/', authorization(false, [Role.SUPER_ADMIN, Role.USER, Role.APP_CREATOR]), ctrl.getAll);
 
-router.post('/', authorization(false, [Role.SUPER_ADMIN]), ctrl.saveGroup);
+router.post('/', authorization(), ctrl.saveGroup);
+// router.post('/', authorization(false, [Role.SUPER_ADMIN , Role.USER]), ctrl.saveGroup);
 
-router.delete('/:id', authorization(false, [Role.SUPER_ADMIN]), ctrl.deleteGroup);
+router.delete('/:id', authorization(), ctrl.deleteGroup);
+// router.delete('/:id', authorization(false, [Role.SUPER_ADMIN , Role.USER]), ctrl.deleteGroup);
 
 export default router.routes();

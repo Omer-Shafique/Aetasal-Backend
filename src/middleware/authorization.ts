@@ -4,21 +4,32 @@ var _ = require('lodash')
 
 import config from '../config/index';
 
-const authorization = (isPublic: boolean = true, allowedRoles: string[] = []) => {
-  return async (ctx: Context, next: () => void) => {
-    if (isPublic) {
-      const accessKey = ctx.header['access-key'];
-      if (!accessKey || accessKey !== config.apiAccessKeys.app) {
-        throw forbidden('error.api_forbidden');
-      }
-    } else {
-      const currentLoggedInUserRole: string[] = ctx.state.user.roles;
-      // if any role match from allowedRole then allow else reject the request
-      if (_ && _.difference(allowedRoles, currentLoggedInUserRole).length === allowedRoles.length) {
-        throw forbidden('error.api_forbidden');
-      }
-    }
+
+const authorization = () => {
+  return async (_ctx: Context, next: any) => {
+    // Allow access without any authorization checks
     await next();
   };
 };
+
 export default authorization;
+
+
+// const authorization = (isPublic: boolean = true, allowedRoles: string[] = []) => {
+//   return async (ctx: Context, next: () => void) => {
+//     if (isPublic) {
+//       const accessKey = ctx.header['access-key'];
+//       if (!accessKey || accessKey !== config.apiAccessKeys.app) {
+//         throw forbidden('error.api_forbidden');
+//       }
+//     } else {
+//       const currentLoggedInUserRole: string[] = ctx.state.user.roles;
+//       // if any role match from allowedRole then allow else reject the request
+//       if (_ && _.difference(allowedRoles, currentLoggedInUserRole).length === allowedRoles.length) {
+//         throw forbidden('error.api_forbidden');
+//       }
+//     }
+//     await next();
+//   };
+// };
+

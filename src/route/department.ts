@@ -9,7 +9,7 @@ const router = new Router({
   prefix: `/api/department`,
 });
 
-router.use(authentication);
+// router.use(authentication);
 
 router.get('/', ctrl.getAll);
 

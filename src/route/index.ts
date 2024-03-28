@@ -30,7 +30,7 @@ const allowedMethods = router.allowedMethods({
 });
 const routesToExport = [
   routes,
-  // allowedMethods,
+  allowedMethods,
   ping,
   auth,
   file,

@@ -7,7 +7,7 @@ const router = new Router({
   prefix: `/api/list-of-value`
 });
 
-router.use(authentication);
+// router.use(authentication);
 
 router.get('/', ctrl.findByKeys);
 

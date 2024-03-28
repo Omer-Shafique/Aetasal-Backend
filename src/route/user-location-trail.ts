@@ -9,9 +9,10 @@ const router = new Router({
   prefix: `/api/user-location-trail`,
 });
 
-router.use(authentication);
+// router.use(authentication);
 
-router.get('/', authorization(false, [Role.SUPER_ADMIN]), ctrl.getAll);
+router.get('/', authorization(), ctrl.getAll);
+// router.get('/', authorization(false, [Role.SUPER_ADMIN , Role.USER]), ctrl.getAll);
 
 router.post('/', ctrl.saveUserLocationTrail);
 

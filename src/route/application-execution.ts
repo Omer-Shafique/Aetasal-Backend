@@ -11,6 +11,9 @@ const router = new Router({
 
 router.use(authentication);
 
+// router.get('/all', authorization(), ctrl.getAllExecution);
+router.get('/all', authorization(false, [Role.USER]), ctrl.getAllExecution);
+// router.get('/all', authorization(), ctrl.getAllExecution);
 router.get('/all', authorization(false, [Role.SUPER_ADMIN]), ctrl.getAllExecution);
 
 router.get('/:applicationId/execution', ctrl.getApplicationExecution);
@@ -54,6 +57,7 @@ router.put('/:executionId/withdraw/:executionWorkflowId', ctrl.withdraw);
 
 router.delete('/execution/:executionId', ctrl.deleteApplicationExecution);
 
+// router.post('/:applicationId', authorization(),
 router.post('/:applicationId', authorization(false, [Role.SUPER_ADMIN]),
   ctrl.deleteApplicationExecutionByApplication);
 

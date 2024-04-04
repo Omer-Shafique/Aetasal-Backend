@@ -2,11 +2,18 @@ import { Context } from 'koa';
 import * as userService from '../services/user';
 import { IUserRequest } from '../interface/user';
 
+// export const getAll = async (ctx: Context, next: () => void) => {
+//     const loggedInUser = ctx.state.user;
+//     ctx.state.data = await userService.getAll(loggedInUser);
+//     await next();
+// };
+
 export const getAll = async (ctx: Context, next: () => void) => {
-    const loggedInUser = ctx.state.user;
-    ctx.state.data = await userService.getAll(loggedInUser);
+    ctx.state.data = await userService.getAll();
     await next();
 };
+
+
 
 export const getUser = async (ctx: Context, next: () => void) => {
     const userId: string = ctx.state.user.userId;

@@ -13,8 +13,10 @@ router.use(authentication);
 
 router.get('/', ctrl.getAll);
 
-router.post('/', authorization(false, [Role.SUPER_ADMIN]), ctrl.saveRole);
+// router.post('/', authorization(), ctrl.saveRole);
+router.post('/', authorization(false, [Role.SUPER_ADMIN , Role.USER]), ctrl.saveRole);
 
-router.delete('/:id', authorization(false, [Role.SUPER_ADMIN]), ctrl.deleteRole);
+// router.delete('/:id', authorization(), ctrl.deleteRole);
+router.delete('/:id', authorization(false, [Role.SUPER_ADMIN , Role.USER]), ctrl.deleteRole);
 
 export default router.routes();

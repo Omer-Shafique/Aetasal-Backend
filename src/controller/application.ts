@@ -5,12 +5,19 @@ import * as applicationWorkflowService from '../services/application-workflow';
 import * as applicationWorkflowFieldPermissionService from '../services/application-workflow-field-permission';
 import * as applicationExecutionService from '../services/application-execution';
 import { IReassignExecutionRequest, IGetWithdrawRequest, IDeleteExecutionRequest } from '../interface/application';
+import { v4 as uuidv4 } from 'uuid';
 
 export const getCurrentLoggedInUserApplications = async (ctx: Context, next: () => void) => {
-  const userId: string = ctx.state.user.userId;
+  const userId: string = ctx.state.user.userId; 
   ctx.state.data = await applicationService.getCurrentLoggedInUserApplications(userId);
   await next();
 };
+
+// export const getCurrentLoggedInUserApplications = async (ctx: Context, next: () => void) => {
+//   const userId: string = ctx.state.user.userId;
+//   ctx.state.data = await applicationService.getCurrentLoggedInUserApplications(userId);
+//   await next();
+// };
 
 export const getApplicationById = async (ctx: Context, next: () => void) => {
   const applicationId: string = ctx.params.applicationId;
@@ -128,8 +135,14 @@ export const getInProgressExecutions = async (ctx: Context, next: () => void) =>
   await next();
 };
 
+// export const getExecutionWorkflowsCount = async (ctx: Context, next: () => void) => {
+//   const userId: string = ctx.state.user.userId;
+//   ctx.state.data = await applicationExecutionService.getExecutionWorkflowsCount(userId);
+//   await next();
+// };
+
 export const getExecutionWorkflowsCount = async (ctx: Context, next: () => void) => {
-  const userId: string = ctx.state.user.userId;
+  const userId: string = ctx.state.user.userId; ;
   ctx.state.data = await applicationExecutionService.getExecutionWorkflowsCount(userId);
   await next();
 };
@@ -158,7 +171,15 @@ export const getExecutionParticipatedUsers = async (ctx: Context, next: () => vo
   await next();
 };
 
+// export const saveApplication = async (ctx: Context, next: () => void) => {
+//   const userId: string = ctx.state.user.userId;
+//   const payload = ctx.request.body;
+//   ctx.state.data = await applicationService.saveApplication(userId, payload);
+//   await next();
+// };
+
 export const saveApplication = async (ctx: Context, next: () => void) => {
+  // Generate a UUIDv4 to mock a user ID
   const userId: string = ctx.state.user.userId;
   const payload = ctx.request.body;
   ctx.state.data = await applicationService.saveApplication(userId, payload);
@@ -167,7 +188,8 @@ export const saveApplication = async (ctx: Context, next: () => void) => {
 
 export const publishApplication = async (ctx: Context, next: () => void) => {
   const id: string = ctx.params.applicationId;
-  const userId: string = ctx.state.user.userId;
+  // const userId: string = ctx.state.user.userId;
+  const userId: string = ctx.state.user.userId; ;
   const editableUserIds: string = ctx.request.body.editableUserIds;
   const canAllEdits: boolean = ctx.request.body.canAllEdits;
   const subject: string = ctx.request.body.subject;
@@ -184,7 +206,8 @@ export const saveApplicationForm = async (ctx: Context, next: () => void) => {
 
 export const saveApplicationWorkflow = async (ctx: Context, next: () => void) => {
   const applicationId: string = ctx.params.applicationId;
-  const userId: string = ctx.state.user.userId;
+  const userId: string = ctx.state.user.userId; ;
+  // const userId: string = ctx.state.user.userId;
   const payload = ctx.request.body;
   ctx.state.data = await applicationWorkflowService.saveApplicationWorkflow(applicationId, userId, payload);
   await next();
@@ -200,7 +223,8 @@ export const saveApplicationWorkflowFieldPermission = async (ctx: Context, next:
 
 export const saveApplicationExecution = async (ctx: Context, next: () => void) => {
   const applicationId: string = ctx.params.applicationId;
-  const userId: string = ctx.state.user.userId;
+  const userId: string = ctx.state.user.userId; ;
+  // const userId: string = ctx.state.user.userId;
   const payload = ctx.request.body;
   ctx.state.data = await applicationExecutionService.saveApplicationExecution(applicationId, userId, payload);
   await next();
@@ -208,14 +232,16 @@ export const saveApplicationExecution = async (ctx: Context, next: () => void) =
 
 export const saveApplicationExecutionForm = async (ctx: Context, next: () => void) => {
   const applicationId: string = ctx.params.applicationId;
-  const userId: string = ctx.state.user.userId;
+  const userId: string = ctx.state.user.userId; ;
+  // const userId: string = ctx.state.user.userId;
   const payload = ctx.request.body;
   ctx.state.data = await applicationExecutionService.saveApplicationExecutionForm(applicationId, userId, payload);
   await next();
 };
 
 export const publishApplicationExecution = async (ctx: Context, next: () => void) => {
-  const userId: string = ctx.state.user.userId;
+  const userId: string = ctx.state.user.userId; ;
+  // const userId: string = ctx.state.user.userId;
   const applicationId: string = ctx.params.applicationId;
   const applicationExecutionId: string = ctx.params.applicationExecutionId;
   ctx.state.data = await applicationExecutionService.publishApplicationExecution(applicationId,
@@ -250,14 +276,16 @@ export const publishApplicationExecutionWorkflow = async (ctx: Context, next: ()
 
 export const deleteApplication = async (ctx: Context, next: () => void) => {
   const id: string = ctx.params.id;
-  const userId: string = ctx.state.user.userId;
+  const userId: string = ctx.state.user.userId; ;
+  // const userId: string = ctx.state.user.userId;
   ctx.state.data = await applicationService.deleteApplication(id, userId);
   await next();
 };
 
 export const deleteApplicationExecution = async (ctx: Context, next: () => void) => {
   const executionId: string = ctx.params.executionId;
-  const userId: string = ctx.state.user.userId;
+  const userId: string = ctx.state.user.userId; ;
+  // const userId: string = ctx.state.user.userId;
   ctx.state.data = await applicationExecutionService.deleteApplicationExecution(executionId, userId);
   await next();
 };
@@ -265,7 +293,8 @@ export const deleteApplicationExecution = async (ctx: Context, next: () => void)
 export const deleteApplicationExecutionByApplication = async (ctx: Context, next: () => void) => {
   const payload: IDeleteExecutionRequest = {
     applicationId: ctx.params.applicationId,
-    loggedInUserId: ctx.state.user.userId,
+    loggedInUserId: ctx.state.user.userId ,
+    // loggedInUserId: ctx.state.user.userId,
     startDate: ctx.request.body.startDate,
     endDate: ctx.request.body.endDate,
     status: ctx.request.body.status
@@ -288,7 +317,8 @@ export const reassignWorkflow = async (ctx: Context, next: () => void) => {
 export const withdraw = async (ctx: Context, next: () => void) => {
   const executionId: string = ctx.params.executionId;
   const executionWorkflowId: string = ctx.params.executionWorkflowId;
-  const userId: string = ctx.state.user.userId;
+  const userId: string = ctx.state.user.userId; ;
+  // const userId: string = ctx.state.user.userId;
   ctx.state.data = await applicationExecutionService.withdraw(userId, executionId, executionWorkflowId);
   await next();
 };

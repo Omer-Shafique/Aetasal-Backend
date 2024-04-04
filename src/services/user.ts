@@ -1,5 +1,5 @@
 import * as boom from 'boom';
-var _ = require('lodash')
+import * as _ from 'lodash';
 import * as encryption from '../utils/encryption';
 import * as userRepo from '../repositories/user';
 import * as departmentRepo from '../repositories/department';
@@ -24,15 +24,13 @@ export const findById = async (userId: string) => {
     return user;
 };
 
-export const getAll = async (loggedInUser: any) => {
+export const getAll = async () => {
     const users: any = await userRepo.getAll();
     const returnUsers = [];
     for (let user of users) {
         user = user.get({ plain: true });
-        if (user.id === loggedInUser.userId) {
-            user.firstName = 'Self';
-            user.lastName = '';
-        }
+        user.firstName = user.firstName || 'Default';
+        user.lastName = user.lastName || 'User';
         const roles = _.reject(
             user.userRoles.map((userRole: any) => userRole.role && userRole.role.name), _.isUndefined);
         user.role = roles;
@@ -44,13 +42,18 @@ export const getAll = async (loggedInUser: any) => {
 
 export const getByDepartmentId = async (departmentId: number, loggedInUserId: string) => {
     await validate({ departmentId }, joiSchema.getUserByDepartmentId);
-    const users: any = await userRepo.getByDepartmentId(departmentId, loggedInUserId);
-    const indexOfCurrentUser = users.findIndex((user: any) => user.id === loggedInUserId);
-    if (indexOfCurrentUser >= 0) {
-        users[indexOfCurrentUser].firstName = 'Self';
-        users[indexOfCurrentUser].lastName = '';
+    let users: any;
+    if (loggedInUserId) {
+        users = await userRepo.getByDepartmentId(departmentId, loggedInUserId);
+        const indexOfCurrentUser = users.findIndex((user: any) => user.id === loggedInUserId);
+        if (indexOfCurrentUser >= 0) {
+            users[indexOfCurrentUser].firstName = 'Self';
+            users[indexOfCurrentUser].lastName = '';
+        }
+        return users;
+    } else {
+        throw boom.badRequest('No logged-in user ID found');
     }
-    return users;
 };
 
 export const saveUser = async (payload: IUserRequest) => {
@@ -102,10 +105,6 @@ export const saveUser = async (payload: IUserRequest) => {
         const encryptedPassword = encryption.saltHashPassword(payload.password);
         user.password = encryptedPassword;
     }
-    console.log("User---", user)
-    // if (user && user.id)
-    // user = _.omitBy(user, _.isUndefined);
-
     const savedUser = await userRepo.upsertUser(user);
     const userRoles: IUserRoleAttributes[] = [];
     payload.roleIds.forEach((roleId) => {

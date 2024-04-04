@@ -1,10 +1,10 @@
 import { Context } from 'koa';
 import { forbidden } from 'boom';
-var _ = require('lodash')
+import * as _ from 'lodash';
 
 import config from '../config/index';
 
-const authorization = (isPublic: boolean = true, allowedRoles: string[] = []) => {
+export const authorization = (isPublic: boolean = true, allowedRoles: string[] = []) => {
   return async (ctx: Context, next: () => void) => {
     if (isPublic) {
       const accessKey = ctx.header['access-key'];
@@ -21,4 +21,5 @@ const authorization = (isPublic: boolean = true, allowedRoles: string[] = []) =>
     await next();
   };
 };
+
 export default authorization;

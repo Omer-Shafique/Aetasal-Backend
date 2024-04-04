@@ -10,7 +10,8 @@ const router = new Router({
 });
 
 router.use(authentication);
-router.use(authorization(false, [Role.SUPER_ADMIN]));
+router.use(authorization());
+router.use(authorization(false, [Role.SUPER_ADMIN , Role.USER]));
 
 router.get('/my-item', ctrl.getMyItemReport);
 

@@ -7,7 +7,7 @@ const router = new Router({
   prefix: `/api/file`,
 });
 
-// router.use(authentication);
+router.use(authentication);
 
 router.post('/picture', ctrl.saveProfilePicture);
 

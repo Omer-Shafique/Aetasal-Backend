@@ -9,7 +9,7 @@ const router = new Router({
   prefix: `/api/lookup`,
 });
 
-// router.use(authentication);
+router.use(authentication);
 
 router.get('/', ctrl.getAll);
 
@@ -17,16 +17,16 @@ router.get('/:lookupId/data', ctrl.findByLookupId);
 
 router.get('/lookup-data/:lookupDataId', ctrl.findLookupDataById);
 
-router.post('/', authorization(), ctrl.saveLookup);
-// router.post('/', authorization(false, [Role.SUPER_ADMIN , Role.USER]), ctrl.saveLookup);
+// router.post('/', authorization(), ctrl.saveLookup);
+router.post('/', authorization(false, [Role.SUPER_ADMIN , Role.USER]), ctrl.saveLookup);
 
-router.post('/:lookupId/data', authorization(), ctrl.saveLookupData);
-// router.post('/:lookupId/data', authorization(false, [Role.SUPER_ADMIN , Role.USER]), ctrl.saveLookupData);
+// router.post('/:lookupId/data', authorization(), ctrl.saveLookupData);
+router.post('/:lookupId/data', authorization(false, [Role.SUPER_ADMIN , Role.USER]), ctrl.saveLookupData);
 
-router.delete('/:id', authorization(), ctrl.deleteLookup);
-// router.delete('/:id', authorization(false, [Role.SUPER_ADMIN , Role.USER]), ctrl.deleteLookup);
+// router.delete('/:id', authorization(), ctrl.deleteLookup);
+router.delete('/:id', authorization(false, [Role.SUPER_ADMIN , Role.USER]), ctrl.deleteLookup);
 
-router.delete('/:lookupId/data/:id', authorization(), ctrl.deleteLookupData);
-// router.delete('/:lookupId/data/:id', authorization(false, [Role.SUPER_ADMIN , Role.USER]), ctrl.deleteLookupData);
+// router.delete('/:lookupId/data/:id', authorization(), ctrl.deleteLookupData);
+router.delete('/:lookupId/data/:id', authorization(false, [Role.SUPER_ADMIN , Role.USER]), ctrl.deleteLookupData);
 
 export default router.routes();

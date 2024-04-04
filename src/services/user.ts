@@ -24,29 +24,6 @@ export const findById = async (userId: string) => {
     return user;
 };
 
-// export const getAll = async (loggedInUser: any) => {
-//     if (!loggedInUser) {
-//         throw boom.badRequest('No logged-in user found');
-//     }
-
-//     const users: any = await userRepo.getAll();
-//     const returnUsers = [];
-//     for (let user of users) {
-//         user = user.get({ plain: true });
-//         if (user.id === loggedInUser.userId) {
-//             user.firstName = 'Self';
-//             user.lastName = '';
-//         }
-//         const roles = _.reject(
-//             user.userRoles.map((userRole: any) => userRole.role && userRole.role.name), _.isUndefined);
-//         user.role = roles;
-//         delete user.userRoles;
-//         returnUsers.push(user);
-//     }
-//     return returnUsers;
-// };
-
-
 export const getAll = async () => {
     const users: any = await userRepo.getAll();
     const returnUsers = [];
@@ -62,15 +39,6 @@ export const getAll = async () => {
     }
     return returnUsers;
 };
-
-
-
-
-
-
-
-
-
 
 export const getByDepartmentId = async (departmentId: number, loggedInUserId: string) => {
     await validate({ departmentId }, joiSchema.getUserByDepartmentId);

@@ -44,12 +44,18 @@ export const getAll = async (loggedInUser: any): Promise<IApplicationExecutionIn
 };
 
 export const getById = async (executionId: string): Promise<IApplicationExecutionInstance> => {
-    const execution = await applicationExecutionRepo.findById(executionId);
-    if (!execution) {
-        throw boom.badRequest('Invalid execution id');
+    try {
+        const execution = await applicationExecutionRepo.findById(executionId);
+        if (!execution) {
+            throw boom.badRequest('Invalid execution id 1');
+        }
+        return execution;
+    } catch (error) {
+        console.error('Error in getById function:', error);
+        throw error; 
     }
-    return execution;
 };
+
 
 export const getByApplicationId = async (applicationId: string): Promise<IApplicationExecutionInstance[]> => {
     const application = await applicationRepo.findById(applicationId);
@@ -64,17 +70,27 @@ export const getDetailedExecutionById = async (
     loggedInUser: any,
     status: string
 ): Promise<IApplicationExecutionAttributes> => {
-    const execution = await applicationExecutionRepo.findById(executionId);
-    if (!execution) {
-        throw boom.badRequest('Invalid execution id');
-    }
-    const transformedExecution = await transformExecutionData([execution], loggedInUser, status);
-    if (!transformedExecution || !transformedExecution.length) {
-        throw boom.badRequest('Not allowed');
-    } else {
-        return transformedExecution[0];
+    try {
+
+        console.log('Execution ID:', executionId);
+        const execution = await applicationExecutionRepo.findById(executionId);
+
+        if (!execution) {
+            throw boom.badRequest('Invalid execution id');
+        }
+
+        const transformedExecution = await transformExecutionData([execution], loggedInUser, status);
+        if (!transformedExecution || !transformedExecution.length) {
+            throw boom.badRequest('Not allowed');
+        } else {
+            return transformedExecution[0];
+        }
+    } catch (error) {
+        console.error('Error in getDetailedExecutionById:', error);
+        throw error; 
     }
 };
+
 
 export const getExecutionByLoggedInUserId =
     async (loggedInUser: any, type: string, status?: string): Promise<IApplicationExecutionAttributes[]> => {

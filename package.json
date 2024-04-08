@@ -65,6 +65,7 @@
     "@types/convict": "4.2.0",
     "@types/dotenv": "4.0.3",
     "@types/fs-extra": "^5.0.4",
+    "@types/googlemaps": "^3.43.3",
     "@types/joi": "13.3.0",
     "@types/jsonwebtoken": "^8.3.0",
     "@types/jwt-decode": "2.2.1",

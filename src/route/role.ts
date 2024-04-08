@@ -10,13 +10,14 @@ const router = new Router({
 });
 
 router.use(authentication);
+router.use(authorization(false, [Role.SUPER_ADMIN])); // Only super admin can access this module
 
 router.get('/', ctrl.getAll);
 
 // router.post('/', authorization(), ctrl.saveRole);
-router.post('/', authorization(false, [Role.SUPER_ADMIN , Role.USER]), ctrl.saveRole);
+router.post('/', authorization(false, [Role.SUPER_ADMIN  ]), ctrl.saveRole);
 
 // router.delete('/:id', authorization(), ctrl.deleteRole);
-router.delete('/:id', authorization(false, [Role.SUPER_ADMIN , Role.USER]), ctrl.deleteRole);
+router.delete('/:id', authorization(false, [Role.SUPER_ADMIN  ]), ctrl.deleteRole);
 
 export default router.routes();

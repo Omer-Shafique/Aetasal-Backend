@@ -9,7 +9,7 @@ export const loginSchema: Joi.SchemaMap = {
 export const signUpSchema: Joi.SchemaMap = {
     email: Joi.string().email().required(),
     password: Joi.string().required(),
-    role: Joi.string().required().valid([Role.SUPER_ADMIN, Role.USER, Role.BILLING, Role.APP_CREATOR]),
+    role: Joi.string().required().valid([Role.SUPER_ADMIN , Role.BILLING, Role.APP_CREATOR]),
     timezone: Joi.string().required(),
 };
 
@@ -22,7 +22,7 @@ export const socialLoginSchema: Joi.SchemaMap = {
     timezone: Joi.string(),
     role: Joi.when('isSignUp', {
         is: true,
-        then: Joi.string().required().valid([Role.SUPER_ADMIN, Role.USER, Role.BILLING, Role.APP_CREATOR])
+        then: Joi.string().required().valid([Role.SUPER_ADMIN , Role.BILLING, Role.APP_CREATOR])
     }),
 };
 

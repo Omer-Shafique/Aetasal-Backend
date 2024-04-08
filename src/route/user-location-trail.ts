@@ -12,7 +12,7 @@ const router = new Router({
 router.use(authentication);
 
 // router.get('/', authorization(), ctrl.getAll);
-router.get('/', authorization(false, [Role.SUPER_ADMIN , Role.USER]), ctrl.getAll);
+router.get('/', authorization(false, [Role.SUPER_ADMIN  ]), ctrl.getAll);
 
 router.post('/', ctrl.saveUserLocationTrail);
 

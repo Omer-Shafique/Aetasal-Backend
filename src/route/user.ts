@@ -12,25 +12,25 @@ const router = new Router({
 
 router.use(authentication);
 
-router.get('/', authorization(false, [Role.SUPER_ADMIN, Role.USER]), userCtrl.getAll);
+router.get('/', authorization(false, [Role.SUPER_ADMIN ]), userCtrl.getAll);
 // router.get('/', authorization(), userCtrl.getAll);
 
 router.get('/me', userCtrl.getUser);
 
 // router.get('/:userId', authorization(), userCtrl.getUserById);
-router.get('/:userId', authorization(false, [Role.SUPER_ADMIN, Role.USER]), userCtrl.getUserById);
+router.get('/:userId', authorization(false, [Role.SUPER_ADMIN ]), userCtrl.getUserById);
 
 router.get('/department/:departmentId',
 // authorization(), userCtrl.getUserByDepartmentId);
-authorization(false, [Role.SUPER_ADMIN, Role.USER]), userCtrl.getUserByDepartmentId);
+authorization(false, [Role.SUPER_ADMIN ]), userCtrl.getUserByDepartmentId);
 
 // router.post('/', authorization(), userCtrl.saveUser);
-router.post('/', authorization(false, [Role.SUPER_ADMIN, Role.USER]), userCtrl.saveUser);
+router.post('/', authorization(false, [Role.SUPER_ADMIN ]), userCtrl.saveUser);
 
 router.put('/change-password', ctrl.changePassword);
 
 // router.delete('/:userId/delete', authorization(), userCtrl.deleteUser);
-router.delete('/:userId/delete', authorization(false, [Role.SUPER_ADMIN, Role.USER]), userCtrl.deleteUser);
+router.delete('/:userId/delete', authorization(false, [Role.SUPER_ADMIN ]), userCtrl.deleteUser);
 
 export default router.routes();
 

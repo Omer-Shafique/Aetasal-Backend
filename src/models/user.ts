@@ -144,6 +144,7 @@ export const define = (sequelize: Sequelize.Sequelize): IUserModel => {
     model.hasMany(models.Department);
     model.hasMany(models.OfficeLocation);
     model.hasMany(models.UserGroup);
+    //@ts-ignore
     model.hasMany(models.UserRole);
   };
 

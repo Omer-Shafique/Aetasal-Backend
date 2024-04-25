@@ -22,7 +22,7 @@ router.get('/:userId', authorization(false, [Role.SUPER_ADMIN ]), userCtrl.getUs
 
 router.get('/department/:departmentId',
 // authorization(), userCtrl.getUserByDepartmentId);
-authorization(false, [Role.SUPER_ADMIN ]), userCtrl.getUserByDepartmentId);
+authorization(false, [Role.SUPER_ADMIN , Role.USER ]), userCtrl.getUserByDepartmentId);
 
 // router.post('/', authorization(), userCtrl.saveUser);
 router.post('/', authorization(false, [Role.SUPER_ADMIN ]), userCtrl.saveUser);

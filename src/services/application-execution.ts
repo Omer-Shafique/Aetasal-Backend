@@ -129,7 +129,7 @@ export const getExecutionInProcessLoggedInUserIdByQuery =
             endDate = moment(endDate + ' 23:59:59').add(-5, 'h').toISOString();
         }
         if (startDate && endDate && loggedInUser.roles) {
-            isAdmin = loggedInUser.roles.includes(Role.SUPER_ADMIN);
+            isAdmin = loggedInUser.roles.includes(Role.SUPER_ADMIN , Role.USER);
         }
         let dbApplicationExecutions = [];
         if (!type) {
@@ -202,7 +202,7 @@ export const getExecutionParticipatedLoggedInUserId =
 export const getExecutionWithdrawLoggedInUserId =
     async (loggedInUser: any, payload: IGetWithdrawRequest): Promise<IApplicationExecutionAttributes[]> => {
         await validate({ loggedInUserId: loggedInUser.userId }, joiSchema.getExecutionParticipatedLoggedInUserId);
-        const isAdmin = loggedInUser.roles && loggedInUser.roles.includes(Role.SUPER_ADMIN);
+        const isAdmin = loggedInUser.roles && loggedInUser.roles.includes(Role.SUPER_ADMIN , Role.USER);
         if (payload.startDate) {
             payload.startDate = moment(payload.startDate + ' 00:00:00').add(-5, 'h').toISOString();
         }
@@ -222,7 +222,7 @@ export const getExecutionWithdrawLoggedInUserId =
 export const getInProgressExecutions =
     async (loggedInUser: any, applicationId: string, startDate?: string, endDate?: string):
         Promise<IGetExecutionSelect[]> => {
-        const forAdmin: boolean = loggedInUser.roles && loggedInUser.roles.includes(Role.SUPER_ADMIN);
+        const forAdmin: boolean = loggedInUser.roles && loggedInUser.roles.includes(Role.SUPER_ADMIN , Role.USER);
         if (startDate) {
             startDate = moment(startDate + ' 00:00:00').add(-5, 'h').toISOString();
         }

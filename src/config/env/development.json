@@ -28,10 +28,9 @@
         "password": "ISlA7Pl0"
     },
     "cloudinary": {
-        "name": "hkjwi1kol",
-        "apiKey": "732115177397848",
-        "apiSecret": "kdCEa_TfwwQEfgueAzcc8--7a30",
-        "env": "cloudinary://732115177397848:kdCEa_TfwwQEfgueAzcc8--7a30@hkjwi1kol/"
+        "name": "ddsvmgrms",
+        "apiKey": "893328467329785",
+        "apiSecret": "9MIxc2mtjR6HZVqygwxRJQ3QR2U"
     },
     "sendgrid": {
         "key": ""

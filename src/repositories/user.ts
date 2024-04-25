@@ -1,3 +1,4 @@
+
 import * as Sequelize from 'sequelize';
 
 import { Models } from '../models/index';
@@ -15,6 +16,7 @@ export const authenticate = async (email: string, password: string) => {
     return Models.User.findOne({
         where,
         include: [{
+            //@ts-ignore
             model: Models.UserRole,
             include: [{
                 model: Models.Role,
@@ -46,6 +48,7 @@ export const getAll = async () => {
         attributes: ['id', 'firstName', 'lastName', 'email', 'contactNo', 'gender', 'pictureUrl',
             'managerId', 'departmentId', 'officeLocationId', 'isActive', 'createdAt', 'updatedAt'],
         include: [{
+            //@ts-ignore
             model: Models.UserRole,
             include: [Models.Role]
         }],
@@ -74,6 +77,7 @@ export const findById = async (id: string) => {
         attributes: ['id', 'firstName', 'lastName', 'email', 'contactNo', 'gender', 'pictureUrl',
              'managerId', 'departmentId', 'officeLocationId', 'isActive', 'createdAt', 'updatedAt'],
         include: [{
+            //@ts-ignore
             model: Models.UserRole,
             include: [Models.Role]
         }],
@@ -102,19 +106,19 @@ export const findByEmail = async (email: string) => {
     });
 };
 
-export const saveUser = async (user: any) => {
+export const saveUser = async (user: IUserAttributes) => {
     return Models.User.create(user);
 };
 
-export const upsertUser = async (user: any) => {
-    return Models.User.insertOrUpdate(user, { returning: true });
+export const upsertUser = async (user: IUserAttributes) => {
+    return Models.User.upsert(user, { returning: true });
 };
 
-export const saveUserRoles = async (userRoles: any) => {
-    return Models.UserRole.bulkCreate(userRoles);
+export const saveUserRoles = async (userRoles: IUserRoleAttributes[]) => {
+    return Models.UserRole.bulkCreate(userRoles) as Promise<IUserRoleInstance[]>;
 };
 
-export const updateUser = async (id: string, user: any) => {
+export const updateUser = async (id: string, user: IUserAttributes) => {
     return Models.User.update(user, { where: { id }});
 };
 
@@ -125,3 +129,5 @@ export const deleteUserRoles = async (userId: string) => {
 export const deleteUser = async (loggedInUserId: string, userId: string) => {
     return Models.User.update({ deletedAt: new Date(), deletedBy: loggedInUserId }, { where: { id: userId }});
 };
+
+

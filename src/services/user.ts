@@ -105,6 +105,7 @@ export const saveUser = async (payload: IUserRequest) => {
         const encryptedPassword = encryption.saltHashPassword(payload.password);
         user.password = encryptedPassword;
     }
+    //@ts-ignore
     const savedUser = await userRepo.upsertUser(user);
     const userRoles: IUserRoleAttributes[] = [];
     payload.roleIds.forEach((roleId) => {

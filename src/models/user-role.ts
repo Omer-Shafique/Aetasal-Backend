@@ -1,5 +1,4 @@
 import * as Sequelize from 'sequelize';
-
 import { IModelFactory } from './index';
 import { IRoleAttributes, IRoleInstance } from './role';
 
@@ -18,8 +17,10 @@ export interface IUserRoleInstance extends Sequelize.Instance<IUserRoleAttribute
     isActive: boolean;
     role?: IRoleInstance;
 }
-
-export interface IUserRoleModel extends Sequelize.Model<IUserRoleInstance, IUserRoleAttributes> { }
+//@ts-ignore
+export interface IUserRoleModel extends Sequelize.Model<IUserRoleInstance, IUserRoleAttributes> {
+    bulkCreate(userRoles: any): unknown;
+}
 
 export const define = (sequelize: Sequelize.Sequelize): IUserRoleModel => {
     //@ts-ignore

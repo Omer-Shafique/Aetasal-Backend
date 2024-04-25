@@ -12,12 +12,12 @@ const router = new Router({
 router.use(authentication);
 
 // router.get('/', authorization(), ctrl.getAll);
-router.get('/', authorization(false, [Role.SUPER_ADMIN, Role.USER, Role.APP_CREATOR]), ctrl.getAll);
+router.get('/', authorization(false, [Role.SUPER_ADMIN , Role.APP_CREATOR]), ctrl.getAll);
 
 // router.post('/', authorization(), ctrl.saveGroup);
-router.post('/', authorization(false, [Role.SUPER_ADMIN , Role.USER]), ctrl.saveGroup);
+router.post('/', authorization(false, [Role.SUPER_ADMIN  ]), ctrl.saveGroup);
 
 // router.delete('/:id', authorization(), ctrl.deleteGroup);
-router.delete('/:id', authorization(false, [Role.SUPER_ADMIN , Role.USER]), ctrl.deleteGroup);
+router.delete('/:id', authorization(false, [Role.SUPER_ADMIN  ]), ctrl.deleteGroup);
 
 export default router.routes();

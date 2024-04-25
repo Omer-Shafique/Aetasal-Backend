@@ -32,6 +32,7 @@ export interface IModelFactory extends Sequelize.Models {
   Group: Group.IGroupModel;
   UserGroup: UserGroup.IUserGroupModel;
   ListOfValue: ListOfValue.IListOfValueModel;
+  //@ts-ignore
   UserRole: UserRole.IUserRoleModel;
   Application: Application.IApplicationModel;
   ApplicationWorkflow: ApplicationWorkflow.IApplicationWorkflowModel;
@@ -48,6 +49,7 @@ export interface IModelFactory extends Sequelize.Models {
   UserLocationTrail: UserLocationTrail.IUserLocationTrailModel;
 }
 
+//@ts-ignore
 const models: IModelFactory = {
   Role: Role.define(Database),
   User: User.define(Database),

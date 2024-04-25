@@ -18,6 +18,7 @@ interface IConfig {
     password: string;
     database: string;
     url: string;
+    ssl: boolean;
   };
   apiAccessKeys: {
     app: string;
@@ -106,7 +107,14 @@ const config = convict<IConfig>({
     url: {
       format: String,
       default: ''
+    },
+    ssl: {
+      doc: 'Whether to use SSL for PostgreSQL connection.',
+      format: Boolean,
+      default: false, 
+      env: 'POSTGRES_SSL',
     }
+  
   },
   apiAccessKeys: {
     app: {

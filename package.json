@@ -55,7 +55,7 @@
     "nodemailer": "^5.0.0",
     "pg": "^7.4.3",
     "pg-hstore": "2.3.2",
-    "randexp": "git://github.com/fent/randexp.js.git#v0.5.2",
+    "randexp": "^0.5.2",
     "uuid": "3.3.2"
   },
   "devDependencies": {

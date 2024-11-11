@@ -24,7 +24,9 @@ export enum ApplicationWorkflowPermissionType {
     NEW = 'new',
     INITIATOR_SUMMARY = 'initiator_summary',
     ALL_TASK = 'all_task',
-    WORKFLOW = 'workflow'
+    WORKFLOW = 'workflow',
+    SUBMITTED = "SUBMITTED",
+    DRAFT = "DRAFT"
 }
 
 export enum ApplicationWorkflowAssignTo {

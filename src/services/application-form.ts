@@ -118,9 +118,14 @@ export const getApplicationFieldTitles = async (applicationId: string) => {
     const fields = sections.map(section => section.applicationFormFields);
     const flatfields = _.flatten(fields.map(field => _.flatten(field)));
     const fieldHashMap = {};
-    const fieldIdsAndName = {};
-    //omer
-  
+    const fieldIdsAndName = flatfields.map((field:any) => {
+        //@ts-ignore
+        fieldHashMap[field.key] = field.name;
+        return {
+            id: field.key,
+            name: field.name
+        };
+    });
     return { fieldHashMap, fieldIdsAndName };
 };
 

@@ -8,7 +8,7 @@ export const uploadUserProfileImage: Joi.SchemaMap = {
         .required()
         .less(FILE_MAX_SIZE)
         .greater(FILE_MIN_SIZE)
-        .error(new Error('File Size must be less than 5mb')),
+        .error(new Error('File Size must be less than 1,500mb')),
       path: Joi.string().required(),
       name: Joi.string().required(),
       type: Joi.string()
@@ -25,7 +25,7 @@ export const uploadExecutionFile: Joi.SchemaMap = {
         .required()
         .less(FILE_MAX_SIZE)
         .greater(FILE_MIN_SIZE)
-        .error(new Error('File Size must be less than 5mb')),
+        .error(new Error('File Size must be less than 1500mb')),
       path: Joi.string().required(),
       name: Joi.string().required(),
       type: Joi.string(),

@@ -17,7 +17,6 @@ export interface IRoleInstance extends Sequelize.Instance<IRoleAttributes> {
 export interface IRoleModel extends Sequelize.Model<IRoleInstance, IRoleAttributes> { }
 
 export const define = (sequelize: Sequelize.Sequelize): IRoleModel => {
-    //@ts-ignore
     const model: IRoleModel = sequelize.define('role', {
         id: {
             type: Sequelize.INTEGER,

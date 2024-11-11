@@ -44,18 +44,12 @@ export const getAll = async (loggedInUser: any): Promise<IApplicationExecutionIn
 };
 
 export const getById = async (executionId: string): Promise<IApplicationExecutionInstance> => {
-    try {
-        const execution = await applicationExecutionRepo.findById(executionId);
-        if (!execution) {
-            throw boom.badRequest('Invalid execution id 1');
-        }
-        return execution;
-    } catch (error) {
-        console.error('Error in getById function:', error);
-        throw error; 
+    const execution = await applicationExecutionRepo.findById(executionId);
+    if (!execution) {
+        throw boom.badRequest('Invalid execution id');
     }
+    return execution;
 };
-
 
 export const getByApplicationId = async (applicationId: string): Promise<IApplicationExecutionInstance[]> => {
     const application = await applicationRepo.findById(applicationId);
@@ -70,27 +64,17 @@ export const getDetailedExecutionById = async (
     loggedInUser: any,
     status: string
 ): Promise<IApplicationExecutionAttributes> => {
-    try {
-
-        console.log('Execution ID:', executionId);
-        const execution = await applicationExecutionRepo.findById(executionId);
-
-        if (!execution) {
-            throw boom.badRequest('Invalid execution id');
-        }
-
-        const transformedExecution = await transformExecutionData([execution], loggedInUser, status);
-        if (!transformedExecution || !transformedExecution.length) {
-            throw boom.badRequest('Not allowed');
-        } else {
-            return transformedExecution[0];
-        }
-    } catch (error) {
-        console.error('Error in getDetailedExecutionById:', error);
-        throw error; 
+    const execution = await applicationExecutionRepo.findById(executionId);
+    if (!execution) {
+        throw boom.badRequest('Invalid execution id');
+    }
+    const transformedExecution = await transformExecutionData([execution], loggedInUser, status);
+    if (!transformedExecution || !transformedExecution.length) {
+        throw boom.badRequest('Not allowed');
+    } else {
+        return transformedExecution[0];
     }
 };
-
 
 export const getExecutionByLoggedInUserId =
     async (loggedInUser: any, type: string, status?: string): Promise<IApplicationExecutionAttributes[]> => {
@@ -129,7 +113,7 @@ export const getExecutionInProcessLoggedInUserIdByQuery =
             endDate = moment(endDate + ' 23:59:59').add(-5, 'h').toISOString();
         }
         if (startDate && endDate && loggedInUser.roles) {
-            isAdmin = loggedInUser.roles.includes(Role.SUPER_ADMIN , Role.USER);
+            isAdmin = loggedInUser.roles.includes(Role.SUPER_ADMIN);
         }
         let dbApplicationExecutions = [];
         if (!type) {
@@ -202,7 +186,7 @@ export const getExecutionParticipatedLoggedInUserId =
 export const getExecutionWithdrawLoggedInUserId =
     async (loggedInUser: any, payload: IGetWithdrawRequest): Promise<IApplicationExecutionAttributes[]> => {
         await validate({ loggedInUserId: loggedInUser.userId }, joiSchema.getExecutionParticipatedLoggedInUserId);
-        const isAdmin = loggedInUser.roles && loggedInUser.roles.includes(Role.SUPER_ADMIN , Role.USER);
+        const isAdmin = loggedInUser.roles && loggedInUser.roles.includes(Role.SUPER_ADMIN);
         if (payload.startDate) {
             payload.startDate = moment(payload.startDate + ' 00:00:00').add(-5, 'h').toISOString();
         }
@@ -222,7 +206,7 @@ export const getExecutionWithdrawLoggedInUserId =
 export const getInProgressExecutions =
     async (loggedInUser: any, applicationId: string, startDate?: string, endDate?: string):
         Promise<IGetExecutionSelect[]> => {
-        const forAdmin: boolean = loggedInUser.roles && loggedInUser.roles.includes(Role.SUPER_ADMIN , Role.USER);
+        const forAdmin: boolean = loggedInUser.roles && loggedInUser.roles.includes(Role.SUPER_ADMIN);
         if (startDate) {
             startDate = moment(startDate + ' 00:00:00').add(-5, 'h').toISOString();
         }
@@ -323,9 +307,9 @@ const transformExecutionData = async (
                 plainExecution.application.applicationFormSections.push(section);
                 continue;
             }
-            // let type: ApplicationWorkflowPermissionType = status ? PERMISSION_STATUS_MAPPING[status] || ApplicationWorkflowPermissionType.WORKFLOW : ApplicationWorkflowPermissionType.WORKFLOW;
-            let type: ApplicationWorkflowPermissionType = status ?  ApplicationWorkflowPermissionType.WORKFLOW : ApplicationWorkflowPermissionType.WORKFLOW;
-            //omer
+            //@ts-ignore
+            let type = status ? PERMISSION_STATUS_MAPPING[status]
+                || ApplicationWorkflowPermissionType.WORKFLOW : ApplicationWorkflowPermissionType.WORKFLOW;
             if (!latestWorkflowId && status === ApplicationExecutionStatus.CLARITY) {
                 type = ApplicationWorkflowPermissionType.NEW;
             }
@@ -347,7 +331,7 @@ const transformExecutionData = async (
                         // setting title
                         const formField = plainExecution.applicationExecutionForms
                             .find(f => f.applicationFormFieldId === field.id);
-                        title = title.replace(`{${field.fieldId}}`, formField ? formField.value : '');
+                        title = title.replace(`{${field.fieldId}}`, formField ? formField.value : 'unknown title');
                         plainExecution.title = title;
                     }
                     if (!plainExecution ||

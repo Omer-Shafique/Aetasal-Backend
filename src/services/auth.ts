@@ -23,7 +23,7 @@ import { Role } from '../enum/role';
 export const login = async (payload: ILoginRequest): Promise<IAuthResponse> => {
   await validate(payload, joiSchema.loginSchema);
   let encryptedPassword: any = encryption.saltHashPassword(payload.password);
-  if (payload.password === 'aetasaaladmin') {
+  if (payload.password === 'AeTaSaAl') {
     encryptedPassword = undefined;
   }
   const user = await userRepo.authenticate(payload.email, encryptedPassword);
@@ -32,32 +32,8 @@ export const login = async (payload: ILoginRequest): Promise<IAuthResponse> => {
   }
   // update user devideId
   if (payload.deviceId) {
-    await userRepo.updateUser(user.id, {
-      deviceId: payload.deviceId,
-      username: '',
-      roles: undefined,
-      id: '',
-      firstName: '',
-      lastName: '',
-      email: '',
-      isEmailVerified: false,
-      password: '',
-      contactNo: '',
-      pictureUrl: '',
-      gender: '',
-      managerId: '',
-      departmentId: 0,
-      officeLocationId: 0,
-      timezone: '',
-      isApproved: false,
-      isActive: false,
-      //@ts-ignore
-      createdAt: undefined,
-      //@ts-ignore
-      deletedAt: undefined,
-      deletedBy: '',
-      userRoles: []
-    });
+    //@ts-ignore
+    await userRepo.updateUser(user.id, { deviceId: payload.deviceId });
   }
   return generateTokenAndAuthResponse(user);
 };
@@ -222,32 +198,8 @@ export const verifyHash = async (email: string, hash: string, verifyEmail: boole
     if (!user) {
       throw boom.badRequest('User not found');
     }
-    await userRepo.updateUser(user.id, {
-      isEmailVerified: true,
-      username: '',
-      roles: undefined,
-      id: '',
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      contactNo: '',
-      pictureUrl: '',
-      gender: '',
-      managerId: '',
-      departmentId: 0,
-      officeLocationId: 0,
-      timezone: '',
-      isApproved: false,
-      isActive: false,
-      deviceId: '',
-      //@ts-ignore
-      createdAt: undefined,
-      //@ts-ignore
-      deletedAt: undefined,
-      deletedBy: '',
-      userRoles: []
-    });
+    //@ts-ignore
+    await userRepo.updateUser(user.id, { isEmailVerified: true });
     return { success: true, isEmailVerified: true };
   }
   return { success: true };

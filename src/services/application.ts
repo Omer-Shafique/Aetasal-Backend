@@ -1,5 +1,3 @@
-// applicationService.ts
-
 import * as boom from 'boom';
 import { validate } from '../validations/index';
 
@@ -33,20 +31,14 @@ export const getById = async (applicationId: string) => {
 
 export const saveApplication = async (loggedInUserId: string, application: IApplicationAttributes) => {
     await validate(application, joiSchema.saveApplication);
-    
-    // Set createdBy field
-    application.createdBy = loggedInUserId;
-    
-    // Check if the application has an id
     if (application.id) {
-        // If the application already exists, check if it's valid
         const savedApp = await applicationRepo.findById(application.id);
         if (!savedApp) {
             throw boom.badRequest('Invalid Application Id');
         }
+    } else {
+        application.createdBy = loggedInUserId;
     }
-    
-    // Validate user ids
     const userIds = application.editableUserIds ? application.editableUserIds.split(',') : [];
     if (userIds && userIds.length) {
         const users = await userRepo.findByIds(userIds);
@@ -54,8 +46,6 @@ export const saveApplication = async (loggedInUserId: string, application: IAppl
             throw boom.badRequest('Invalid User');
         }
     }
-    
-    // Save or update the application
     return applicationRepo.saveApplication(application);
 };
 

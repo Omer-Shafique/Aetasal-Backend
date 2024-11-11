@@ -19,7 +19,6 @@ export interface IListOfValueInstance extends Sequelize.Instance<IListOfValueAtt
 export interface IListOfValueModel extends Sequelize.Model<IListOfValueInstance, IListOfValueAttributes> { }
 
 export const define = (sequelize: Sequelize.Sequelize): IListOfValueModel => {
-    //@ts-ignore
     const model: IListOfValueModel = sequelize.define('listOfValue', {
         id: {
             type: Sequelize.INTEGER,

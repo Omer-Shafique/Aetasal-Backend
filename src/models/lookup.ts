@@ -28,7 +28,6 @@ export interface ILookupInstance extends Sequelize.Instance<ILookupAttributes> {
 export interface ILookupModel extends Sequelize.Model<ILookupInstance, ILookupAttributes> { }
 
 export const define = (sequelize: Sequelize.Sequelize): ILookupModel => {
-    //@ts-ignore
     const model: ILookupModel = sequelize.define('lookup', {
         id: {
             type: Sequelize.INTEGER,

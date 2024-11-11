@@ -33,7 +33,6 @@ export interface IApplicationFormSectionModel
     extends Sequelize.Model<IApplicationFormSectionInstance, IApplicationFormSectionAttributes> { }
 
 export const define = (sequelize: Sequelize.Sequelize): IApplicationFormSectionModel => {
-  //@ts-ignore
     const model: IApplicationFormSectionModel = sequelize.define('applicationFormSection', {
       id: {
         type: Sequelize.UUID,

@@ -39,6 +39,7 @@ function checkOriginAgainstWhitelist(ctx: Koa.Context) {
 }
 export async function startServer(log: Bunyan) {
   const app = new Koa();
+  //@ts-ignore
   app.use(bunyanLogger(log));
   app.use(async (ctx: Context, next: any) => {
     ctx.set('Cache-Control', 'no-cache, no-store, must-revalidate');
@@ -48,6 +49,7 @@ export async function startServer(log: Bunyan) {
   app.use(koaBody({ jsonLimit: '10mb', formLimit: '50mb', multipart: true, json: true }));
   app.use(pagination);
   const frontendDir = path.join(__dirname, '..', 'aetesaal-omer', 'aetasaal-frontend-omer', 'dist', 'aetasaal-web');
+  //@ts-ignore
   app.use(serve(frontendDir));
   app.use(errorMiddleware());
   app.use(routes());
@@ -55,6 +57,7 @@ export async function startServer(log: Bunyan) {
   return new Promise<void>((resolve, reject) => {
     const p = process.env.PORT || config.server.port;
     app.listen(p, () => {
+      //@ts-ignore
       log.info('server started on port %d with env=%s', p, config.env);
       resolve();
     });

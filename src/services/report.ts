@@ -33,13 +33,10 @@ export const getMyItemReport = async (loggedInUser: any, participated: boolean =
     const dbApplicationExecutions = await
         applicationExecutionRepo.getAll(loggedInUser.userId, true);
     const myItems = await transformExecutionData(dbApplicationExecutions);
-for (const itemKey of Object.keys(myItems)) {
-    // @ts-ignore
-    const item = myItems[itemKey];
-    responseMyItems.push({ ...item });
-}
-
-
+    for (const item of Object.keys(myItems)) {
+        //@ts-ignore
+        responseMyItems.push({ ...myItems[item] });
+    }
     const responseParticipatedItems: IMyItemReport[] = [];
     if (participated) {
         const executionIds = await applicationExecutionRepo.getApplicationExecutionParticipatedIds(loggedInUser.userId);
@@ -48,7 +45,7 @@ for (const itemKey of Object.keys(myItems)) {
             applicationExecutionRepo.getApplicationExecutionsByIds(ids);
         const participatedItems = transformExecutionData(myParticipatedExecutions);
         for (const item of Object.keys(participatedItems)) {
-            // @ts-ignore
+            //@ts-ignore
             responseParticipatedItems.push({ ...participatedItems[item] });
         }
     }
@@ -81,9 +78,9 @@ const transformExecutionData = (
         if (!plainExecution.application) {
             continue;
         }
-        // @ts-ignore
+        //@ts-ignore
         if (!response[plainExecution.application.id]) {
-            // @ts-ignore
+            //@ts-ignore
             response[plainExecution.application.id] = {
                 applicationId: plainExecution.application.id,
                 applicationName: plainExecution.application.name,
@@ -100,21 +97,21 @@ const transformExecutionData = (
                 plainExecution.applicationExecutionWorkflows, 'createdAt').reverse();
             const executionWorkflow = plainExecution && plainExecution.applicationExecutionWorkflows && plainExecution.applicationExecutionWorkflows[0];
             if (!executionWorkflow || !executionWorkflow.applicationWorkflowId) {
-                // @ts-ignore
+                //@ts-ignore
                 response[plainExecution.application.id].draft += 1;
                 continue;
             }
             if (executionWorkflow.status === ApplicationExecutionStatus.APPROVED) {
-                // @ts-ignore
+                //@ts-ignore
                 response[plainExecution.application.id].completed += 1;
             } else if (executionWorkflow.status === ApplicationExecutionStatus.REJECT) {
-                // @ts-ignore
+                //@ts-ignore
                 response[plainExecution.application.id].rejected += 1;
             } else if (executionWorkflow.status === ApplicationExecutionStatus.DRAFT) {
-                // @ts-ignore
+                //@ts-ignore
                 response[plainExecution.application.id].inProgress += 1;
             } else if (executionWorkflow.status === ApplicationExecutionStatus.WITHDRAW) {
-                // @ts-ignore
+                //@ts-ignore
                 response[plainExecution.application.id].withdraw += 1;
             }
         }
@@ -138,9 +135,9 @@ const getMyItemsExecutions = async (loggedInUser: any) => {
         getExecutionWithdrawLoggedInUserId(loggedInUser, {})
     ]);
     for (const execution of drafts) {
-        // @ts-ignore
-        if (!response[execution.applicationId])
-         { // @ts-ignore
+        //@ts-ignore
+        if (!response[execution.applicationId]) {
+            //@ts-ignore
             response[execution.applicationId] = {
                 applicationId: execution.applicationId,
                 applicationName: execution.name,
@@ -151,13 +148,13 @@ const getMyItemsExecutions = async (loggedInUser: any) => {
                 withdraw: 0
             };
         }
-        // @ts-ignore
+        //@ts-ignore
         response[execution.applicationId].draft += 1;
     }
     for (const execution of inputs) {
-        // @ts-ignore
+        //@ts-ignore
         if (!response[execution.applicationId]) {
-            // @ts-ignore
+            //@ts-ignore
             response[execution.applicationId] = {
                 applicationId: execution.applicationId,
                 applicationName: execution.name,
@@ -168,13 +165,13 @@ const getMyItemsExecutions = async (loggedInUser: any) => {
                 withdraw: 0
             };
         }
-        // @ts-ignore
+        //@ts-ignore
         response[execution.applicationId].draft += 1;
     }
     for (const execution of inProgress) {
-        // @ts-ignore
+        //@ts-ignore
         if (!response[execution.applicationId]) {
-            // @ts-ignore
+//@ts-ignore
             response[execution.applicationId] = {
                 applicationId: execution.applicationId,
                 applicationName: execution.name,
@@ -184,14 +181,15 @@ const getMyItemsExecutions = async (loggedInUser: any) => {
                 rejected: 0,
                 withdraw: 0
             };
+
         }
-        // @ts-ignore
+        //@ts-ignore
         response[execution.applicationId].inProgress += 1;
     }
     for (const execution of approved) {
-        // @ts-ignore
+        //@ts-ignore
         if (!response[execution.applicationId]) {
-            // @ts-ignore
+            //@ts-ignore
             response[execution.applicationId] = {
                 applicationId: execution.applicationId,
                 applicationName: execution.name,
@@ -202,13 +200,13 @@ const getMyItemsExecutions = async (loggedInUser: any) => {
                 withdraw: 0
             };
         }
-        // @ts-ignore
+        //@ts-ignore
         response[execution.applicationId].completed += 1;
     }
     for (const execution of rejects) {
-        // @ts-ignore
+        //@ts-ignore
         if (!response[execution.applicationId]) {
-            // @ts-ignore
+            //@ts-ignore
             response[execution.applicationId] = {
                 applicationId: execution.applicationId,
                 applicationName: execution.name,
@@ -219,16 +217,16 @@ const getMyItemsExecutions = async (loggedInUser: any) => {
                 withdraw: 0
             };
         }
-        // @ts-ignore
+        //@ts-ignore
         response[execution.applicationId].rejected += 1;
     }
     for (const execution of withdrawals) {
         if (!execution.application) {
             continue;
         }
-        // @ts-ignore
+        //@ts-ignore
         if (!response[execution.application.id]) {
-            // @ts-ignore
+            //@ts-ignore
             response[execution.application.id] = {
                 applicationId: execution.application.id,
                 applicationName: execution.application.name,
@@ -239,7 +237,7 @@ const getMyItemsExecutions = async (loggedInUser: any) => {
                 withdraw: 0
             };
         }
-        // @ts-ignore
+        //@ts-ignore
         response[execution.application.id].withdraw += 1;
     }
     return response;
@@ -257,7 +255,7 @@ export const getApplicationExecutionTimeReport =
         const dbApplicationExecutions: IGetExecutionTimelineSelect[] = await
             applicationExecutionRepo.getApplicationExecutionsForTimeReport(payload.applicationId,
                 payload.startDate, payload.endDate);
-        const response:  ITimeApplicationResponse[] = [];
+        const response: ITimeApplicationResponse[] = [];
         const ids = dbApplicationExecutions.map((execution) => execution.id);
         const executionWorkflows = await applicationExecutionWorkflowRepo.getByApplicationExecutionIds(ids);
         for (const execution of dbApplicationExecutions) {
